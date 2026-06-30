@@ -1,28 +1,21 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import Draft from "./pages/Draft";
 import TeamBuilder from "./pages/TeamBuilder";
 import Settings from "./pages/Settings";
 
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
+import Layout from "./components/Layout";
 
-function App() {
-
+export default function App() {
   return (
+    <BrowserRouter>
 
-    <div className="app">
-
-      <Sidebar />
-
-      <main className="content">
-
-        <Header />
+      <Layout>
 
         <Routes>
 
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Dashboard />} />
 
           <Route path="/draft" element={<Draft />} />
 
@@ -32,12 +25,8 @@ function App() {
 
         </Routes>
 
-      </main>
+      </Layout>
 
-    </div>
-
+    </BrowserRouter>
   );
-
 }
-
-export default App;

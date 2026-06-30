@@ -1,5 +1,9 @@
-export default function Settings(){
+export default function Settings() {
+  return (
+    <div className="page">
+      <h1>Settings</h1>
 
-return <h2>Settings</h2>
-
+      <p>Coming Soon</p>
+    </div>
+  );
 }

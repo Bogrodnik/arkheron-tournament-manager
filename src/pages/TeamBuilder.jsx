@@ -1,5 +1,9 @@
-export default function TeamBuilder(){
+export default function TeamBuilder() {
+  return (
+    <div className="page">
+      <h1>Team Builder</h1>
 
-return <h2>Team Builder</h2>
-
+      <p>Coming Soon</p>
+    </div>
+  );
 }
