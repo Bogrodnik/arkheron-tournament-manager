@@ -1,23 +1,30 @@
 import DraftSlot from "./DraftSlot";
 
 export default function DraftBoard({
-  title,
-  draft,
+    title,
+    draft,
+    side = "left",
 }) {
-  return (
-    <div className="draft-column">
+    return (
+        <div className="draft-column">
 
-      {title && (
-        <h2>{title}</h2>
-      )}
+            {title && (
+                <h2>{title}</h2>
+            )}
 
-      {draft.map((entry, index) => (
-        <DraftSlot
-          key={index}
-          draft={entry}
-        />
-      ))}
+            {draft.map(
+                (
+                    entry,
+                    index
+                ) => (
+                    <DraftSlot
+                        key={index}
+                        draft={entry}
+                        side={side}
+                    />
+                )
+            )}
 
-    </div>
-  );
+        </div>
+    );
 }

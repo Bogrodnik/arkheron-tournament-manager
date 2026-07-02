@@ -1,73 +1,88 @@
 import { getActionText } from "../../draftLogic";
 
 export default function DraftFlow({
-  draftOrder,
-  draft,
-  currentStep,
+    draft,
+    team1Name,
+    team2Name,
 }) {
-  return (
-    <div className="draft-flow">
 
-      {draft.map((entry, index) => {
-        {draft.length < draftOrder.length && (
-    <div className="flow-next">
+    function getTeamName(team) {
+        return team === 1
+            ? team1Name
+            : team2Name;
+    }
 
-        NEXT:
+    function getAction(entry) {
+        return entry.type === "pick"
+            ? "Pick"
+            : "Ban";
+    }
 
-        {" "}
+    return (
+        <div className="draft-flow">
 
-        {getActionText(
-            draftOrder[currentStep]
-        )}
+            {draft.map(
+                (
+                    entry,
+                    index
+                ) => {
 
-    </div>
-)}
-   const state =
-    index === draft.length - 1
-        ? "current"
-        : "complete";
-        
-    const selected = entry.item;
+                    const selected =
+                        entry.item;
 
-        return (
-          <div
-            key={index}
-            className={`flow-step ${state}`}
-          >
+                    const isCurrent =
+                        index ===
+                        draft.length - 1;
 
-            <div className="flow-left">
+                    return (
+                        <div
+                            key={index}
+                            className={`flow-step ${
+                                isCurrent
+                                    ? "current"
+                                    : "complete"
+                            }`}
+                        >
 
-              <div className="flow-number">
-                {index + 1}
-              </div>
+                            <div className="flow-number">
+                                {index + 1}
+                            </div>
 
-              <div className="flow-action">
-                {getActionText(entry)}
-              </div>
+                            <div className="flow-action">
+                                {getTeamName(
+                                    entry.team
+                                )}{" "}
+                                {getAction(
+                                    entry
+                                )}
+                            </div>
 
-            </div>
+                            {selected && (
+                                <div className="flow-item">
 
-            <div className="flow-right">
+                                    <img
+                                        src={
+                                            selected.image
+                                        }
+                                        alt={
+                                            selected.name
+                                        }
+                                    />
 
-              {selected && (
-                <>
-                  <img
-                    src={selected.image}
-                    alt={selected.name}
-                  />
+                                    <span>
+                                        {
+                                            selected.name
+                                        }
+                                    </span>
 
-                  <span>
-                    {selected.name}
-                  </span>
-                </>
-              )}
+                                </div>
+                            )}
 
-            </div>
+                        </div>
+                    );
+                }
+            )}
 
-          </div>
-        );
-      })}
-
-    </div>
-  );
+        </div>
+    );
 }

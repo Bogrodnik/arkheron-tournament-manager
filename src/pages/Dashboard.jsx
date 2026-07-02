@@ -1,54 +1,125 @@
+import "../styles/Dashboard.css";
 import { Link } from "react-router-dom";
 
+const pages = [
+    {
+        title: "🎴 Eternal Draft",
+        description:
+            "Tournament draft system supporting picks, bans, timers, series tracking, and observer tools.",
+        path: "/draft",
+    },
+
+    {
+        title: "⚔️ Team Builder",
+        description:
+            "Build tournament legal loadouts including weapons, anchors, crowns, consumables, and set bonuses.",
+        path: "/builder",
+        disabled: true,
+    },
+
+    {
+        title: "🏆 Tournament Manager",
+        description:
+            "Manage brackets, team registration, match scheduling, and results tracking.",
+        path: "/tournament",
+        disabled: true,
+    },
+
+    {
+        title: "📺 Observer Overlay",
+        description:
+            "Generate stream-ready overlays for casters and tournament broadcasts.",
+        path: "/observer",
+        disabled: true,
+    },
+
+    {
+        title: "📊 Statistics",
+        description:
+            "View pick rates, ban rates, team trends, and tournament analytics.",
+        path: "/stats",
+        disabled: true,
+    },
+
+    {
+        title: "⚙️ Settings",
+        description:
+            "Configure application settings, tournament rules, themes, and defaults.",
+        path: "/settings",
+    },
+];
+
 export default function Dashboard() {
-  const cards = [
-    {
-      title: "🎴 Eternal Draft",
-      description: "Run Best-of-5 Eternal Picks & Bans",
-      path: "/draft",
-    },
-    {
-      title: "⚔️ Team Builder",
-      description: "Create legal tournament loadouts",
-      path: "/builder",
-    },
-    {
-      title: "🏆 Tournament",
-      description: "Coming Soon",
-      path: "#",
-      disabled: true,
-    },
-    {
-      title: "⚙️ Settings",
-      description: "Application settings",
-      path: "/settings",
-    },
-  ];
+    return (
+        <div className="dashboard">
 
-  return (
-    <div className="dashboard">
-      <h1>Arkheron Tournament Manager</h1>
-      <p>Welcome to the Arkheron Tournament Suite</p>
+            <div className="dashboard-header card">
 
-      <div className="dashboard-grid">
-        {cards.map((card) =>
-          card.disabled ? (
-            <div key={card.title} className="dashboard-card disabled">
-              <h2>{card.title}</h2>
-              <p>{card.description}</p>
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Professional tournament tools for
+                    Arkheron events, broadcasts,
+                    leagues, and community competitions.
+                </p>
+
             </div>
-          ) : (
-            <Link
-              key={card.title}
-              to={card.path}
-              className="dashboard-card"
-            >
-              <h2>{card.title}</h2>
-              <p>{card.description}</p>
-            </Link>
-          )
-        )}
-      </div>
-    </div>
-  );
+
+            <div className="dashboard-grid">
+
+                {pages.map((page) =>
+
+                    page.disabled ? (
+                        <div
+                            key={page.title}
+                            className="dashboard-card card disabled"
+                        >
+                            <h2>
+                                {page.title}
+                            </h2>
+
+                            <p>
+                                {page.description}
+                            </p>
+
+                            <span className="coming-soon">
+                                Coming Soon
+                            </span>
+                        </div>
+                    ) : (
+                        <Link
+                            key={page.title}
+                            to={page.path}
+                            className="dashboard-card card"
+                        >
+                            <h2>
+                                {page.title}
+                            </h2>
+
+                            <p>
+                                {page.description}
+                            </p>
+
+                            <div className="dashboard-action">
+                                Open →
+                            </div>
+                        </Link>
+                    )
+
+                )}
+
+            </div>
+            <div className="dashboard-footer">
+
+    Made with ❤️ for the Arkheron community by
+    <span className="dashboard-author">
+        {" "}Zarazy
+    </span>
+
+</div>
+
+        </div>
+    );
 }

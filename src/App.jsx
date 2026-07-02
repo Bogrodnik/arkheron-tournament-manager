@@ -1,11 +1,39 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+/*
+=========================================
+Router Imports
+=========================================
+*/
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
+/*
+=========================================
+Page Imports
+=========================================
+*/
 
 import Dashboard from "./pages/Dashboard";
 import Draft from "./pages/Draft";
 import TeamBuilder from "./pages/TeamBuilder";
-import Settings from "./pages/Settings";
+import TournamentSettings from "./pages/TournamentSettings";
+
+/*
+=========================================
+Layout Import
+=========================================
+*/
 
 import Layout from "./components/Layout";
+
+/*
+=========================================
+App
+=========================================
+*/
 
 export default function App() {
   return (
@@ -15,13 +43,48 @@ export default function App() {
 
         <Routes>
 
-          <Route path="/" element={<Dashboard />} />
+          {/* Dashboard */}
 
-          <Route path="/draft" element={<Draft />} />
+          <Route
+            path="/"
+            element={
+              <Dashboard />
+            }
+          />
 
-          <Route path="/builder" element={<TeamBuilder />} />
+          {/* Draft */}
 
-          <Route path="/settings" element={<Settings />} />
+          <Route
+            path="/draft"
+            element={
+              <Draft />
+            }
+          />
+
+          {/* Team Builder */}
+
+          <Route
+            path="/builder"
+            element={
+              <TeamBuilder />
+            }
+          />
+
+          {/* Tournament Rules */}
+
+          <Route
+            path="/tournament-settings"
+            element={
+              <TournamentSettings />
+            }
+          />
+
+          {/* Application Settings */}
+
+          <Route
+              path="/settings"
+              element={<TournamentSettings />}
+          />
 
         </Routes>
 

@@ -1,0 +1,510 @@
+/*
+====================================================
+Tournament Settings Layout
+====================================================
+*/
+
+.settings-page {
+    max-width: 2200px;
+
+    margin: 0 auto;
+
+    padding: 32px;
+
+    display: grid;
+
+    grid-template-columns:
+        320px
+        280px
+        320px
+        minmax(600px, 1fr);
+
+    gap: 24px;
+
+    align-items: start;
+}
+
+.settings-page h1 {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    font-size: 56px;
+    font-weight: 900;
+
+    margin: 0 0 12px 0;
+}
+
+/*
+====================================================
+Columns
+====================================================
+*/
+
+.settings-left,
+.settings-left-middle,
+.settings-right-middle,
+.settings-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/*
+====================================================
+Cards
+====================================================
+*/
+
+.settings-card {
+    background: rgba(
+        18,
+        24,
+        40,
+        .95
+    );
+
+    border: 1px solid rgba(
+        255,
+        255,
+        255,
+        .08
+    );
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 10px 30px rgba(
+            0,
+            0,
+            0,
+            .35
+        );
+}
+
+.settings-card h2 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 24px;
+    font-weight: 800;
+}
+
+/*
+====================================================
+Labels
+====================================================
+*/
+
+.settings-card label {
+    color: #9aa4c7;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+/*
+====================================================
+Inputs
+====================================================
+*/
+
+.settings-card input,
+.settings-card select {
+    width: 100%;
+
+    background: #111827;
+
+    border: 1px solid #27324d;
+
+    color: white;
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    transition: .2s;
+}
+
+.settings-card input:focus,
+.settings-card select:focus {
+    outline: none;
+
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            59,
+            130,
+            246,
+            .25
+        );
+}
+
+/*
+====================================================
+Checkboxes
+====================================================
+*/
+
+.checkbox {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+}
+
+.checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
+/*
+====================================================
+Pools
+====================================================
+*/
+
+.pools-card .checkbox {
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .03
+    );
+
+    border: 1px solid rgba(
+        255,
+        255,
+        255,
+        .05
+    );
+}
+
+/*
+====================================================
+Settings Buttons
+====================================================
+*/
+
+.save-card button {
+    width: 100%;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.save-card button:hover {
+    transform: translateY(-2px);
+}
+
+.save-card button:nth-of-type(1) {
+    background: #22c55e;
+    color: white;
+}
+
+.save-card button:nth-of-type(2) {
+    background: #2563eb;
+    color: white;
+}
+
+.save-card button:nth-of-type(3) {
+    background: #dc2626;
+    color: white;
+}
+
+/*
+====================================================
+Draft Preview
+====================================================
+*/
+
+.preview-card {
+    min-height: 300px;
+}
+
+.draft-preview {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    max-height: 600px;
+
+    overflow-y: auto;
+
+    padding-right: 8px;
+}
+
+.draft-preview-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .04
+    );
+}
+
+.draft-preview-number {
+    width: 32px;
+
+    text-align: center;
+
+    font-weight: 800;
+
+    color: #9aa4c7;
+}
+
+.draft-preview-team {
+    flex: 1;
+
+    font-weight: 700;
+}
+
+.draft-preview-type {
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.draft-preview-type.pick {
+    background: rgba(
+        37,
+        99,
+        235,
+        .25
+    );
+
+    color: #60a5fa;
+}
+
+.draft-preview-type.ban {
+    background: rgba(
+        220,
+        38,
+        38,
+        .25
+    );
+
+    color: #f87171;
+}
+
+/*
+====================================================
+Custom Sequence
+====================================================
+*/
+
+.custom-sequence-card {
+    min-height: 800px;
+}
+
+.custom-sequence-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    max-height: 850px;
+
+    overflow-y: auto;
+
+    padding-right: 8px;
+}
+
+.custom-draft-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .04
+    );
+}
+
+.custom-step-number {
+    width: 28px;
+
+    text-align: center;
+
+    color: #9aa4c7;
+
+    font-weight: 800;
+}
+
+.custom-draft-row select:nth-of-type(1) {
+    width: 120px;
+}
+
+.custom-draft-row select:nth-of-type(2) {
+    flex: 1;
+}
+
+.custom-draft-row button {
+    width: 44px;
+    height: 42px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #334155;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.custom-draft-row button:hover {
+    transform: translateY(-2px);
+}
+
+.custom-draft-buttons {
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 16px;
+}
+
+.custom-draft-buttons button {
+    flex: 1;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #1e293b;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.custom-draft-buttons button:hover {
+    transform: translateY(-2px);
+}
+
+/*
+====================================================
+Danger
+====================================================
+*/
+
+.danger {
+    background: #dc2626 !important;
+    color: white;
+}
+
+/*
+====================================================
+Responsive
+====================================================
+*/
+
+@media (max-width: 1800px) {
+
+    .settings-page {
+        grid-template-columns:
+            320px
+            280px
+            1fr;
+    }
+
+    .settings-right-middle {
+        display: none;
+    }
+}
+
+@media (max-width: 1400px) {
+
+    .settings-page {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+    }
+}
+
+@media (max-width: 900px) {
+
+    .settings-page {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-draft-row {
+        flex-wrap: wrap;
+    }
+
+    .custom-draft-row select,
+    .custom-draft-row button {
+        width: 100%;
+    }
+
+}

@@ -1,36 +1,65 @@
-export default function DraftSlot({ draft }) {
+export default function DraftSlot({
+    draft,
+    side = "left",
+}) {
 
-  const isBan =
-    draft.type === "ban";
+    const isBan =
+        draft.type === "ban";
 
-  return (
-    <div
-      className={`draft-slot ${
-        isBan ? "ban" : "pick"
-      }`}
-    >
+    const badge = (
+        <div className="draft-badge">
+            {isBan
+                ? "BAN"
+                : "PICK"}
+        </div>
+    );
 
-      <div className="draft-badge">
-        {isBan ? "BAN" : "PICK"}
-      </div>
+    const icon = (
+        <img
+            src={draft.item.image}
+            alt={draft.item.name}
+        />
+    );
 
-      <img
-        src={draft.item.image}
-        alt={draft.item.name}
-      />
+    const info = (
+        <div className={`draft-info ${side}`}>
+            <h4>
+                {draft.item.name}
+            </h4>
 
-      <div className="draft-info">
+            <p>
+                {draft.item.setBonus}
+            </p>
+        </div>
+    );
 
-        <h4>
-          {draft.item.name}
-        </h4>
+    return (
+        <div
+            className={`draft-slot ${
+                isBan
+                    ? "ban"
+                    : "pick"
+            } ${side}`}
+        >
 
-        <p>
-          {draft.item.setBonus}
-        </p>
+            {
+                side === "left"
+                    ? (
+                        <>
+                            {info}
+                            {icon}
+                            {badge}
+                        </>
+                    )
+                    : (
+                        <>
+                            {badge}
+                            {icon}
+                            {info}
+                        </>
+                    )
+            }
 
-      </div>
-
-    </div>
-  );
+        </div>
+    );
 }
