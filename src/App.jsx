@@ -5,7 +5,7 @@ Router Imports
 */
 
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
 } from "react-router-dom";
@@ -37,7 +37,7 @@ App
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
 
       <Layout>
 
@@ -90,6 +90,6 @@ export default function App() {
 
       </Layout>
 
-    </BrowserRouter>
+    </HashRouter>
   );
 }
