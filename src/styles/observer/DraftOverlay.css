@@ -1,0 +1,284 @@
+/*
+====================================================
+ROOT
+====================================================
+*/
+
+.draft-overlay {
+
+    width: 100vw;
+    min-height: 100vh;
+
+    padding: 32px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 28px;
+
+    color: white;
+
+    background: transparent;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+}
+
+/*
+====================================================
+HEADER
+====================================================
+*/
+
+.overlay-header {
+
+    display: grid;
+
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    background: rgba(10,16,28,.92);
+
+    backdrop-filter: blur(16px);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 18px;
+
+    padding: 18px 28px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.45);
+
+}
+
+/*
+====================================================
+TEAM
+====================================================
+*/
+
+.overlay-team {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+}
+
+.overlay-team.right {
+
+    justify-content: flex-end;
+
+}
+
+.overlay-team h2 {
+
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+}
+
+/*
+====================================================
+LOGOS
+====================================================
+*/
+
+.overlay-logo {
+
+    width: 64px;
+
+    height: 64px;
+
+    object-fit: contain;
+
+}
+
+/*
+====================================================
+TITLE
+====================================================
+*/
+
+.overlay-title {
+
+    font-size: 2.4rem;
+
+    font-weight: 900;
+
+    letter-spacing: .08em;
+
+    text-align: center;
+
+}
+
+/*
+====================================================
+TOP SECTION
+====================================================
+*/
+
+.overlay-top {
+
+    display: grid;
+
+    grid-template-columns: 1fr 360px 1fr;
+
+    gap: 28px;
+
+    align-items: start;
+
+}
+
+/*
+====================================================
+DRAFT COLUMNS
+====================================================
+*/
+
+.overlay-top .draft-column {
+
+    background: rgba(10,16,28,.88);
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    padding: 20px;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 12px 24px rgba(0,0,0,.35);
+
+}
+
+.overlay-top .draft-column h2 {
+
+    text-align: center;
+
+    margin-bottom: 18px;
+
+    font-size: 1.6rem;
+
+}
+
+/*
+====================================================
+TIMER
+====================================================
+*/
+
+.overlay-top .draft-timer {
+
+    background: rgba(10,16,28,.92);
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    padding: 22px;
+
+    box-shadow:
+        0 12px 24px rgba(0,0,0,.35);
+
+}
+
+/*
+====================================================
+FLOW
+====================================================
+*/
+
+.draft-flow {
+
+    background: rgba(10,16,28,.90);
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    padding: 22px;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 12px 24px rgba(0,0,0,.35);
+
+    max-height: 420px;
+
+    overflow-y: auto;
+
+}
+
+/*
+====================================================
+FLOW SCROLLBAR
+====================================================
+*/
+
+.draft-flow::-webkit-scrollbar {
+
+    width: 8px;
+
+}
+
+.draft-flow::-webkit-scrollbar-thumb {
+
+    background: rgba(255,255,255,.18);
+
+    border-radius: 999px;
+
+}
+
+/*
+====================================================
+LOADING
+====================================================
+*/
+
+.draft-overlay-loading {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+
+    font-size: 2rem;
+
+    background: transparent;
+
+}
+
+/*
+====================================================
+RESPONSIVE
+====================================================
+*/
+
+@media (max-width: 1500px) {
+
+    .overlay-top {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}

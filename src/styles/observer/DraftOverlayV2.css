@@ -1,0 +1,363 @@
+/*
+==================================================
+ROOT
+==================================================
+*/
+
+.draft-v2-root{
+
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+    background:transparent;
+
+    z-index:1000;
+
+}
+
+/*
+==================================================
+COLUMNS
+==================================================
+*/
+
+.draft-v2-column{
+
+    position:absolute;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+.draft-v2-column-left{
+
+    left:32px;
+
+}
+
+.draft-v2-column-right{
+
+    right:32px;
+
+    align-items:flex-end;
+
+}
+
+/*
+==================================================
+PORTRAIT
+==================================================
+*/
+
+.draft-v2-portrait{
+
+    position:relative;
+
+    width:112px;
+
+    height:112px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    transition:
+
+        transform .25s ease,
+
+        box-shadow .25s ease;
+
+}
+
+/*
+==================================================
+IMAGE
+==================================================
+*/
+
+.draft-v2-image{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    /*
+        Shows more face than body.
+    */
+
+    object-position:center 0%;
+
+    transform:scale(.9);
+
+    user-select:none;
+
+    pointer-events:none;
+
+}
+
+/*
+==================================================
+OUTER RING
+==================================================
+*/
+
+.draft-v2-portrait::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    border:3px solid rgba(255,255,255,.92);
+
+    box-sizing:border-box;
+
+    z-index:5;
+
+}
+
+/*
+==================================================
+INNER SHADOW
+==================================================
+*/
+
+.draft-v2-portrait::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    box-shadow:
+
+        inset 0 0 24px rgba(0,0,0,.42);
+
+}
+
+/*
+==================================================
+PICK
+==================================================
+*/
+
+.draft-v2-pick{
+
+    box-shadow:none;
+
+}
+
+.draft-v2-pick::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            rgba(70,255,120,.35) 20%,
+
+            rgba(70,255,120,.18) 55%,
+
+            rgba(70,255,120,0) 90%
+
+        );
+
+    mix-blend-mode:screen;
+
+}
+
+/*
+==================================================
+BAN
+==================================================
+*/
+
+.draft-v2-ban{
+
+    box-shadow:none;
+
+}
+
+.draft-v2-ban::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            rgba(255,60,60,.40) 20%,
+
+            rgba(255,60,60,.18) 55%,
+
+            rgba(255,60,60,0) 90%
+
+        );
+
+    mix-blend-mode:screen;
+
+}
+
+/*
+==================================================
+SUBTLE IDLE ANIMATION
+==================================================
+*/
+
+.draft-v2-portrait{
+
+    animation:
+
+        draft-v2-idle
+
+        4s
+
+        ease-in-out
+
+        infinite;
+
+}
+
+@keyframes draft-v2-idle{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.03);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+/*
+==================================================
+ENTRY ANIMATION
+==================================================
+*/
+
+.draft-v2-portrait{
+
+    animation:
+
+        draft-v2-pop .35s ease,
+
+        draft-v2-idle 4s ease-in-out infinite;
+
+}
+
+@keyframes draft-v2-pop{
+
+    from{
+
+        opacity:0;
+
+        transform:
+
+            scale(.8);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+
+            scale(1);
+
+    }
+
+}
+
+/*
+==================================================
+RESPONSIVE
+==================================================
+*/
+
+@media (max-width:1600px){
+
+    .draft-v2-portrait{
+
+        width:96px;
+
+        height:96px;
+
+    }
+
+}
+
+@media (max-width:1200px){
+
+    .draft-v2-column-left{
+
+        left:18px;
+
+    }
+
+    .draft-v2-column-right{
+
+        right:18px;
+
+    }
+
+    .draft-v2-portrait{
+
+        width:82px;
+
+        height:82px;
+
+    }
+
+}

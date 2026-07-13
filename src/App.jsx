@@ -1,95 +1,88 @@
-/*
-=========================================
-Router Imports
-=========================================
-*/
-
 import {
-  HashRouter,
-  Routes,
-  Route,
+    HashRouter,
+    Routes,
+    Route,
 } from "react-router-dom";
 
-/*
-=========================================
-Page Imports
-=========================================
-*/
+import Layout from "./components/Layout";
 
 import Dashboard from "./pages/Dashboard";
 import Draft from "./pages/Draft";
 import TeamBuilder from "./pages/TeamBuilder";
 import TournamentSettings from "./pages/TournamentSettings";
+import Observer from "./pages/Observer";
 
-/*
-=========================================
-Layout Import
-=========================================
-*/
-
-import Layout from "./components/Layout";
-
-/*
-=========================================
-App
-=========================================
-*/
+import DraftOverlayV2 from "./pages/observer/DraftOverlayV2";
+import BroadcastOverlay from "./pages/observer/BroadcastOverlay";
+import DraftOverlay from "./pages/observer/DraftOverlay";
 
 export default function App() {
-  return (
-    <HashRouter>
 
-      <Layout>
+    return (
 
-        <Routes>
+        <HashRouter>
 
-          {/* Dashboard */}
+            <Routes>
 
-          <Route
-            path="/"
-            element={
-              <Dashboard />
-            }
-          />
+                <Route element={<Layout />}>
 
-          {/* Draft */}
+                    <Route
+                        path="/"
+                        element={<Dashboard />}
+                    />
 
-          <Route
-            path="/draft"
-            element={
-              <Draft />
-            }
-          />
+                    <Route
+                        path="/draft"
+                        element={<Draft />}
+                    />
 
-          {/* Team Builder */}
+                    <Route
+                        path="/builder"
+                        element={<TeamBuilder />}
+                    />
 
-          <Route
-            path="/builder"
-            element={
-              <TeamBuilder />
-            }
-          />
+                    <Route
+                        path="/observer"
+                        element={<Observer />}
+                    />
 
-          {/* Tournament Rules */}
+                    <Route
+                        path="/settings"
+                        element={
+                            <TournamentSettings />
+                        }
+                    />
 
-          <Route
-            path="/tournament-settings"
-            element={
-              <TournamentSettings />
-            }
-          />
+                    <Route
+                        path="/tournament-settings"
+                        element={
+                            <TournamentSettings />
+                        }
+                    />
 
-          {/* Application Settings */}
+                    <Route
+                        path="/overlay/broadcast"
+                        element={
+                            <BroadcastOverlay />
+                        }
+                    />
+                    <Route
+                        path="/overlay/draft-v2"
+                        element={<DraftOverlayV2 />}
+                    />
+                    <Route
+                        path="/overlay/draft"
+                        element={
+                            <DraftOverlay />
+                        }
+                    />
 
-          <Route
-              path="/settings"
-              element={<TournamentSettings />}
-          />
+                </Route>
 
-        </Routes>
+            </Routes>
 
-      </Layout>
+        </HashRouter>
 
-    </HashRouter>
-  );
+    );
+
 }

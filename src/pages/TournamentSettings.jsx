@@ -3,9 +3,16 @@
 Imports
 =========================================
 */
+
+import { useEffect, useState } from "react";
+
 import "../styles/tournamentSettings.css";
-import { useState } from "react";
+
 import { generateDraftOrder } from "../utils/draftGenerator";
+
+import {
+    saveSettings as saveSettingsToFirebase,
+} from "../firebase/settingsService";
 
 /*
 =========================================
@@ -14,33 +21,41 @@ Default Settings
 */
 
 const defaultSettings = {
-  tournamentName: "Dahla Cup",
 
-  organizer: "",
+    tournamentName: "",
 
-  seriesLength: 5,
+    organizer: "",
 
-  firstTeam: 1,
+    seriesLength: 5,
 
-  swapSides: true,
+    firstTeam: 1,
 
-  draftVariant: "snake",
+    swapSides: true,
 
-  picksPerTeam: 3,
+    draftVariant: "snake",
 
-  bansPerTeam: 1,
+    picksPerTeam: 3,
 
-  timerLength: 30,
+    bansPerTeam: 1,
 
-  customDraftOrder: [],
+    timerLength: 30,
 
-  enabledPools: {
-    eternals: true,
-    crowns: true,
-    amulets: true,
-    weapons: true,
-    utility: true,
-  },
+    customDraftOrder: [],
+
+    enabledPools: {
+
+        eternals: true,
+
+        crowns: true,
+
+        amulets: true,
+
+        weapons: true,
+
+        utility: true,
+
+    },
+
 };
 
 /*
@@ -58,18 +73,50 @@ State
 */
 
 const [settings, setSettings] =
-  useState(() => {
+    useState(() => {
 
-    const saved =
-      localStorage.getItem(
-        "tournamentSettings"
-      );
+        const saved =
+            localStorage.getItem(
+                "tournamentSettings"
+            );
 
-    return saved
-      ? JSON.parse(saved)
-      : defaultSettings;
+        if (!saved) {
 
-  });
+            return defaultSettings;
+
+        }
+
+        try {
+
+            return JSON.parse(saved);
+
+        } catch {
+
+            return defaultSettings;
+
+        }
+
+    });
+
+/*
+=========================================
+Auto Save
+=========================================
+*/
+
+useEffect(() => {
+
+    localStorage.setItem(
+
+        "tournamentSettings",
+
+        JSON.stringify(settings)
+
+    );
+
+    saveSettingsToFirebase(settings);
+
+}, [settings]);
 
 /*
 =========================================
@@ -78,19 +125,24 @@ Generated Draft Orders
 */
 
 const generatedDraftOrder =
-  generateDraftOrder(
-    settings.draftVariant,
-    settings.picksPerTeam,
-    settings.bansPerTeam,
-    settings.firstTeam,
-    settings.customDraftOrder
-  );
+    generateDraftOrder(
+
+        settings.draftVariant,
+
+        settings.picksPerTeam,
+
+        settings.bansPerTeam,
+
+        settings.firstTeam,
+
+        settings.customDraftOrder
+
+    );
 
 const previewOrder =
-  settings.draftVariant ===
-    "custom"
-      ? settings.customDraftOrder
-      : generatedDraftOrder;
+    settings.draftVariant === "custom"
+        ? settings.customDraftOrder
+        : generatedDraftOrder;
 
 /*
 =========================================
@@ -99,16 +151,21 @@ Update Setting
 */
 
 function updateSetting(
-  key,
-  value
+    key,
+    value
 ) {
 
-  setSettings(
-    (prev) => ({
-      ...prev,
-      [key]: value,
-    })
-  );
+    setSettings(
+
+        prev => ({
+
+            ...prev,
+
+            [key]: value,
+
+        })
+
+    );
 
 }
 
@@ -118,28 +175,26 @@ Update Pool
 =========================================
 */
 
-function updatePool(
-  pool
-) {
+function updatePool(pool) {
 
-  setSettings(
-    (prev) => ({
+    setSettings(
 
-      ...prev,
+        prev => ({
 
-      enabledPools: {
+            ...prev,
 
-        ...prev.enabledPools,
+            enabledPools: {
 
-        [pool]:
-          !prev.enabledPools[
-            pool
-          ],
+                ...prev.enabledPools,
 
-      },
+                [pool]:
+                    !prev.enabledPools[pool],
 
-    })
-  );
+            },
+
+        })
+
+    );
 
 }
 
@@ -149,200 +204,179 @@ Custom Draft Controls
 =========================================
 */
 
-function addDraftStep(
-  type
-) {
+function addDraftStep(type) {
 
-  setSettings(
-    (prev) => ({
+    setSettings(
 
-      ...prev,
+        prev => ({
 
-      customDraftOrder: [
+            ...prev,
 
-        ...prev.customDraftOrder,
+            customDraftOrder: [
 
-        {
-          team: 1,
-          type,
-        },
+                ...prev.customDraftOrder,
 
-      ],
+                {
 
-    })
-  );
+                    team: 1,
+
+                    type,
+
+                },
+
+            ],
+
+        })
+
+    );
 
 }
 
-function removeDraftStep(
-  index
-) {
+function removeDraftStep(index) {
 
-  setSettings(
-    (prev) => ({
+    setSettings(
 
-      ...prev,
+        prev => ({
 
-      customDraftOrder:
-        prev.customDraftOrder.filter(
-          (
-            _,
-            i
-          ) =>
-            i !== index
-        ),
+            ...prev,
 
-    })
-  );
+            customDraftOrder:
+
+                prev.customDraftOrder.filter(
+
+                    (_, i) =>
+
+                        i !== index
+
+                ),
+
+        })
+
+    );
 
 }
 
 function updateDraftStep(
-  index,
-  field,
-  value
+    index,
+    field,
+    value
 ) {
 
-  setSettings(
-    (prev) => ({
+    setSettings(
 
-      ...prev,
+        prev => ({
 
-      customDraftOrder:
-        prev.customDraftOrder.map(
-          (
-            step,
-            i
-          ) => {
+            ...prev,
 
-            if (
-              i !== index
-            ) {
-              return step;
-            }
+            customDraftOrder:
 
-            return {
+                prev.customDraftOrder.map(
 
-              ...step,
+                    (step, i) => {
 
-              [field]:
-                value,
+                        if (i !== index) {
 
-            };
+                            return step;
 
-          }
-        ),
+                        }
 
-    })
-  );
+                        return {
 
-}
+                            ...step,
 
-function moveDraftStepUp(
-  index
-) {
+                            [field]: value,
 
-  if (
-    index === 0
-  ) {
-    return;
-  }
+                        };
 
-  const updated = [
-    ...settings.customDraftOrder
-  ];
+                    }
 
-  [
-    updated[index - 1],
-    updated[index]
-  ] = [
-    updated[index],
-    updated[index - 1]
-  ];
+                ),
 
-  updateSetting(
-    "customDraftOrder",
-    updated
-  );
+        })
 
-}
-
-function moveDraftStepDown(
-  index
-) {
-
-  if (
-    index ===
-    settings.customDraftOrder.length - 1
-  ) {
-    return;
-  }
-
-  const updated = [
-    ...settings.customDraftOrder
-  ];
-
-  [
-    updated[index + 1],
-    updated[index]
-  ] = [
-    updated[index],
-    updated[index + 1]
-  ];
-
-  updateSetting(
-    "customDraftOrder",
-    updated
-  );
-
-}
-
-/*
-=========================================
-Save Settings
-=========================================
-*/
-
-function saveSettings() {
-
-  localStorage.setItem(
-    "tournamentSettings",
-    JSON.stringify(
-      settings
-    )
-  );
-
-  alert(
-    "Tournament settings saved."
-  );
-
-}
-
-/*
-=========================================
-Load Settings
-=========================================
-*/
-
-function loadSettings() {
-
-  const saved =
-    localStorage.getItem(
-      "tournamentSettings"
     );
 
-  if (!saved) {
+}
 
-    alert(
-      "No saved settings found."
+function moveDraftStepUp(index) {
+
+    if (index === 0) {
+
+        return;
+
+    }
+
+    const updated = [
+
+        ...settings.customDraftOrder,
+
+    ];
+
+    [
+
+        updated[index - 1],
+
+        updated[index],
+
+    ] = [
+
+        updated[index],
+
+        updated[index - 1],
+
+    ];
+
+    updateSetting(
+
+        "customDraftOrder",
+
+        updated
+
     );
 
-    return;
-  }
+}
 
-  setSettings(
-    JSON.parse(saved)
-  );
+function moveDraftStepDown(index) {
+
+    if (
+
+        index ===
+
+        settings.customDraftOrder.length - 1
+
+    ) {
+
+        return;
+
+    }
+
+    const updated = [
+
+        ...settings.customDraftOrder,
+
+    ];
+
+    [
+
+        updated[index + 1],
+
+        updated[index],
+
+    ] = [
+
+        updated[index],
+
+        updated[index + 1],
+
+    ];
+
+    updateSetting(
+
+        "customDraftOrder",
+
+        updated
+
+    );
 
 }
 
@@ -354,13 +388,13 @@ Reset Settings
 
 function resetSettings() {
 
-  setSettings(
-    defaultSettings
-  );
+    localStorage.removeItem(
+        "tournamentSettings"
+    );
 
-  localStorage.removeItem(
-    "tournamentSettings"
-  );
+    setSettings(
+        defaultSettings
+    );
 
 }
 
@@ -591,18 +625,6 @@ return (
             <div className="settings-card save-card">
 
                 <h2>Settings</h2>
-
-                <button
-                    onClick={saveSettings}
-                >
-                    Save Settings
-                </button>
-
-                <button
-                    onClick={loadSettings}
-                >
-                    Load Settings
-                </button>
 
                 <button
                     className="danger"

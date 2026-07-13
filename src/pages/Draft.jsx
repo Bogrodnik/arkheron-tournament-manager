@@ -3,7 +3,7 @@
 Imports
 =========================================
 */
-
+import {saveDraftState as saveDraftToFirebase,} from "../firebase/draftService";
 import { generateDraftOrder } from "../utils/draftGenerator";
 import { useState, useMemo, useEffect } from "react";
 
@@ -19,7 +19,7 @@ import { crowns } from "../data/crowns";
 import { amulets } from "../data/amulets";
 import { weapons } from "../data/weapons";
 import { utilityItems } from "../data/utilityItems";
-
+import {saveDraftToStorage,loadDraftFromStorage,clearDraftStorage,} from "../utils/draftStorage";
 import "../styles/Draft.css";
 
 export default function Draft() {
@@ -288,44 +288,40 @@ Timer Effect
 
 useEffect(() => {
 
-  if (!running) return;
+    if (!running) return;
 
-  const timer =
-    setInterval(() => {
+    const timer = setInterval(() => {
 
-    setTime((prev) => {
+        setTime((prev) => {
 
-      if (prev <= 1) {
+            if (prev <= 1) {
 
-        setRunning(false);
+                setRunning(false);
 
-        if (
-          step <
-          draftOrder.length - 1
-        ) {
-          setStep(
-            (s) => s + 1
-          );
-        }
+                if (step < draftOrder.length - 1) {
 
-        return defaultTimer;
-      }
+                    setStep((s) => s + 1);
 
-      return prev - 1;
-    });
+                }
 
-  }, 1000);
+                return defaultTimer;
 
-  return () =>
-    clearInterval(timer);
+            }
+
+            return prev - 1;
+
+        });
+
+    }, 1000);
+
+    return () => clearInterval(timer);
 
 }, [
-  running,
-  step,
-  draftOrder,
-  defaultTimer,
+    running,
+    step,
+    draftOrder,
+    defaultTimer,
 ]);
-
 /*
 =========================================
 Load Save Effect
@@ -406,7 +402,65 @@ setRunning(
 
 }, []);
 
+/*
+=========================================
+Live Observer Updates
+=========================================
+*/
 
+useEffect(() => {
+
+    const saveData = {
+
+        draft,
+        step,
+
+        draftPool,
+        search,
+
+        score,
+        game,
+
+        team1Name,
+        team2Name,
+
+        team1Logo,
+        team2Logo,
+
+        matchHistory,
+
+        time,
+        running,
+
+    };
+
+    saveDraftToStorage(saveData);
+
+    saveDraftToFirebase(saveData);
+
+}, [
+
+    draft,
+    step,
+
+    draftPool,
+    search,
+
+    score,
+    game,
+
+    team1Name,
+    team2Name,
+
+    team1Logo,
+    team2Logo,
+
+    matchHistory,
+
+    time,
+    running,
+
+]);
 
 /*
 =========================================
@@ -640,7 +694,6 @@ function saveDraftState() {
   matchHistory,
   time,
   running,
-  lastSaved: timestamp,
 };
 
     localStorage.setItem(

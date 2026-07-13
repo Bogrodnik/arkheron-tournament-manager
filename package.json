@@ -13,6 +13,7 @@
     "@vitejs/plugin-react": "latest",
     "axios": "^1.18.1",
     "cheerio": "^1.2.0",
+    "firebase": "^12.16.0",
     "fs-extra": "^11.3.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
