@@ -14,6 +14,8 @@ import EternalCard from "../components/draft/EternalCard";
 
 import { getActionText } from "../draftLogic";
 
+import { compressImage } from "../utils/imageUtils";
+
 import { eternals } from "../data/eternals";
 import { crowns } from "../data/crowns";
 import { amulets } from "../data/amulets";
@@ -130,10 +132,11 @@ Logo Controls
 =========================================
 */
 
-function handleLogoUpload(
+async function handleLogoUpload(
   event,
   team
 ) {
+
   const file =
     event.target.files[0];
 
@@ -141,30 +144,23 @@ function handleLogoUpload(
     return;
   }
 
-  const reader =
-    new FileReader();
+  const compressedLogo =
+    await compressImage(file);
 
-  reader.onload = (
-    e
-  ) => {
+  if (team === 1) {
 
-    if (
-      team === 1
-    ) {
-      setTeam1Logo(
-        e.target.result
-      );
-    } else {
-      setTeam2Logo(
-        e.target.result
-      );
-    }
+    setTeam1Logo(
+      compressedLogo
+    );
 
-  };
+  } else {
 
-  reader.readAsDataURL(
-    file
-  );
+    setTeam2Logo(
+      compressedLogo
+    );
+
+  }
+
 }
 /*
 =========================================

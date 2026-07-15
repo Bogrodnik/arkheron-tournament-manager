@@ -15,6 +15,14 @@ import {
     listenToSettings,
 } from "../../firebase/settingsService";
 
+import {
+
+    listenToBroadcastSettings,
+
+    DEFAULT_SETTINGS,
+
+} from "../../firebase/broadcastSettingsService";
+
 import "../../styles/observer/DraftOverlay.css";
 
 export default function DraftOverlay() {
@@ -24,6 +32,9 @@ export default function DraftOverlay() {
 
     const [settings, setSettings] =
         useState(null);
+
+    const [broadcastSettings, setBroadcastSettings] =
+        useState(DEFAULT_SETTINGS);
 
     useEffect(() => {
 
@@ -39,11 +50,18 @@ export default function DraftOverlay() {
         const unsubscribeSettings =
             listenToSettings(setSettings);
 
+        const unsubscribeBroadcast =
+            listenToBroadcastSettings(
+                setBroadcastSettings
+            );
+
         return () => {
 
             unsubscribeDraft();
 
             unsubscribeSettings();
+
+            unsubscribeBroadcast();
 
             document.body.style.background = "";
 
@@ -53,7 +71,15 @@ export default function DraftOverlay() {
 
     }, []);
 
-    if (!draftState || !settings) {
+    if (
+
+        !draftState ||
+
+        !settings ||
+
+        !broadcastSettings
+
+    ) {
 
         return (
 
@@ -123,10 +149,6 @@ export default function DraftOverlay() {
 
         <div className="draft-overlay">
 
-            {/* ===========================
-                Header
-            =========================== */}
-
             <div className="overlay-header">
 
                 <div className="overlay-team">
@@ -134,9 +156,13 @@ export default function DraftOverlay() {
                     {team1Logo && (
 
                         <img
+
                             src={team1Logo}
+
                             alt=""
+
                             className="overlay-logo"
+
                         />
 
                     )}
@@ -166,9 +192,13 @@ export default function DraftOverlay() {
                     {team2Logo && (
 
                         <img
+
                             src={team2Logo}
+
                             alt=""
+
                             className="overlay-logo"
+
                         />
 
                     )}
@@ -176,10 +206,6 @@ export default function DraftOverlay() {
                 </div>
 
             </div>
-
-            {/* ===========================
-                Draft Boards
-            =========================== */}
 
             <div className="overlay-top">
 
@@ -203,45 +229,53 @@ export default function DraftOverlay() {
 
                 />
 
-                <DraftTimer
+                {
 
-                    currentAction={
+                    broadcastSettings.showTimer && (
 
-                        currentAction
+                        <DraftTimer
 
-                            ? getActionText(
+                            currentAction={
 
-                                  currentAction
+                                currentAction
 
-                              )
+                                    ? getActionText(
 
-                                  .replace(
+                                          currentAction
 
-                                      "Team 1",
+                                      )
 
-                                      team1Name
+                                          .replace(
 
-                                  )
+                                              "Team 1",
 
-                                  .replace(
+                                              team1Name
 
-                                      "Team 2",
+                                          )
 
-                                      team2Name
+                                          .replace(
 
-                                  )
+                                              "Team 2",
 
-                            : "Draft Complete"
+                                              team2Name
 
-                    }
+                                          )
 
-                    running={running}
+                                    : "Draft Complete"
 
-                    time={time}
+                            }
 
-                    showControls={false}
+                            running={running}
 
-                />
+                            time={time}
+
+                            showControls={false}
+
+                        />
+
+                    )
+
+                }
 
                 <DraftBoard
 
@@ -265,19 +299,23 @@ export default function DraftOverlay() {
 
             </div>
 
-            {/* ===========================
-                Draft Flow
-            =========================== */}
+            {
 
-            <DraftFlow
+                broadcastSettings.showDraftFlow && (
 
-                draft={draft}
+                    <DraftFlow
 
-                team1Name={team1Name}
+                        draft={draft}
 
-                team2Name={team2Name}
+                        team1Name={team1Name}
 
-            />
+                        team2Name={team2Name}
+
+                    />
+
+                )
+
+            }
 
         </div>
 

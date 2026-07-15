@@ -16,7 +16,7 @@ ROOT
 
     align-items: flex-start;
 
-    padding-top: 24px;
+    padding-top: 8px;
 
     pointer-events: none;
 
@@ -306,5 +306,36 @@ LOADING
     font-size: 2rem;
 
     color: white;
+
+}
+
+.broadcast-layout{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    gap:450px;
+
+    margin-top:8px;
+
+    transform:scale(.88);
+
+    transform-origin:top center;
+
+}
+.broadcast-layout > .teamhud:first-child{
+
+    justify-self:start;
+
+}
+
+.broadcast-layout > .teamhud:last-child{
+
+    justify-self:end;
 
 }

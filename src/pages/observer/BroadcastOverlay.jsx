@@ -8,13 +8,28 @@ import {
     listenToSettings,
 } from "../../firebase/settingsService";
 
+import {
+
+    listenToBroadcastSettings,
+
+    DEFAULT_SETTINGS,
+
+} from "../../firebase/broadcastSettingsService";
+
+import TeamHUD from "../../components/observer/TeamHUD";
+
 import "../../styles/observer/BroadcastOverlay.css";
 
 export default function BroadcastOverlay() {
 
-    const [draft, setDraft] = useState(null);
+    const [draft, setDraft] =
+        useState(null);
 
-    const [settings, setSettings] = useState(null);
+    const [settings, setSettings] =
+        useState(null);
+
+    const [broadcastSettings, setBroadcastSettings] =
+        useState(DEFAULT_SETTINGS);
 
     useEffect(() => {
 
@@ -30,21 +45,38 @@ export default function BroadcastOverlay() {
         const unsubscribeSettings =
             listenToSettings(setSettings);
 
+        const unsubscribeBroadcast =
+            listenToBroadcastSettings(
+                setBroadcastSettings
+            );
+
         return () => {
 
             unsubscribeDraft();
 
             unsubscribeSettings();
 
-            document.body.style.background = "";
+            unsubscribeBroadcast();
 
-            document.documentElement.style.background = "";
+            document.body.style.background =
+                "";
+
+            document.documentElement.style.background =
+                "";
 
         };
 
     }, []);
 
-    if (!draft || !settings) {
+    if (
+
+        !draft ||
+
+        !settings ||
+
+        !broadcastSettings
+
+    ) {
 
         return (
 
@@ -58,10 +90,6 @@ export default function BroadcastOverlay() {
 
     }
 
-    const tournamentName =
-        settings.tournamentName ||
-        "Arkheron Tournament";
-
     const seriesLength =
         settings.seriesLength || 5;
 
@@ -71,81 +99,79 @@ export default function BroadcastOverlay() {
 
             <div className="broadcast-wrapper">
 
-                <div className="broadcast-tournament">
+                <div className="broadcast-layout">
 
-                    {tournamentName}
+                    {
 
-                </div>
+                        broadcastSettings.showLeftTeam && (
 
-                <div className="broadcast-bar">
+                            <TeamHUD
 
-                    <div className="broadcast-team left">
+                                side="left"
 
-                        {draft.team1Logo && (
+                                logo={draft.team1Logo}
 
-                            <img
-                                src={draft.team1Logo}
-                                className="broadcast-logo"
-                                alt=""
+                                name={draft.team1Name}
+
+                                score={draft.score.team1}
+
+                                seriesLength={seriesLength}
+
+                                draft={
+
+                                    draft.draft.filter(
+
+                                        item =>
+
+                                            item.team === 1
+
+                                    )
+
+                                }
+
+                                settings={broadcastSettings}
+
                             />
 
-                        )}
+                        )
 
-                        <div className="broadcast-name">
+                    }
 
-                            {draft.team1Name}
+                    {
 
-                        </div>
+                        broadcastSettings.showRightTeam && (
 
-                        <div className="broadcast-score blue">
+                            <TeamHUD
 
-                            {draft.score.team1}
+                                side="right"
 
-                        </div>
+                                logo={draft.team2Logo}
 
-                    </div>
+                                name={draft.team2Name}
 
-                    <div className="broadcast-center">
+                                score={draft.score.team2}
 
-                        <div className="broadcast-game">
+                                seriesLength={seriesLength}
 
-                            GAME {draft.game}
+                                draft={
 
-                        </div>
+                                    draft.draft.filter(
 
-                        <div className="broadcast-series">
+                                        item =>
 
-                            BEST OF {seriesLength}
+                                            item.team === 2
 
-                        </div>
+                                    )
 
-                    </div>
+                                }
 
-                    <div className="broadcast-team right">
+                                settings={broadcastSettings}
 
-                        <div className="broadcast-score red">
-
-                            {draft.score.team2}
-
-                        </div>
-
-                        <div className="broadcast-name">
-
-                            {draft.team2Name}
-
-                        </div>
-
-                        {draft.team2Logo && (
-
-                            <img
-                                src={draft.team2Logo}
-                                className="broadcast-logo"
-                                alt=""
                             />
 
-                        )}
+                        )
 
-                    </div>
+                    }
 
                 </div>
 
