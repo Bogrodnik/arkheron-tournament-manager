@@ -24,6 +24,9 @@ import { utilityItems } from "../data/utilityItems";
 import {saveDraftToStorage,loadDraftFromStorage,clearDraftStorage,} from "../utils/draftStorage";
 import "../styles/Draft.css";
 
+import DefaultBlueLogo from "../assets/Logo_default_Blue.png";
+import DefaultRedLogo from "../assets/Logo_default_Red.png";
+
 export default function Draft() {
 /*
 =========================================
@@ -38,16 +41,25 @@ Draft State
 */
 
 const [draftPool, setDraftPool] =
-  useState("eternals");
+    useState("eternals");
 
 const [search, setSearch] =
-  useState("");
+    useState("");
 
 const [draft, setDraft] =
-  useState([]);
+    useState([]);
 
 const [step, setStep] =
-  useState(0);
+    useState(0);
+
+/*
+=========================================
+Load State
+=========================================
+*/
+
+const [loaded, setLoaded] =
+    useState(false);
 /*
 =========================================
 Tournament Settings
@@ -119,12 +131,11 @@ const [team2Name, setTeam2Name] =
 Logo State
 =========================================
 */
-
 const [team1Logo, setTeam1Logo] =
-  useState(null);
+  useState(DefaultBlueLogo);
 
 const [team2Logo, setTeam2Logo] =
-  useState(null);
+  useState(DefaultRedLogo);
 
 /*
 =========================================
@@ -326,75 +337,129 @@ Load Save Effect
 
 useEffect(() => {
 
-  const saved =
-    localStorage.getItem(
-      "arkheronDraftState"
+    const saved =
+
+        localStorage.getItem(
+
+            "arkheronDraftState"
+
+        );
+
+    if (!saved) {
+
+        setLoaded(true);
+
+        return;
+
+    }
+
+    const data =
+
+        JSON.parse(saved);
+
+    setDraft(
+
+        data.draft || []
+
     );
 
-  if (!saved) {
-    return;
-  }
+    setStep(
 
-  const data =
-    JSON.parse(saved);
+        data.step || 0
 
-  setDraft(
-    data.draft || []
-  );
+    );
 
-  setStep(
-    data.step || 0
-  );
+    setDraftPool(
 
-  setDraftPool(
-    data.draftPool ||
-    "eternals"
-  );
+        data.draftPool ||
 
-  setSearch(
-    data.search || ""
-  );
+        "eternals"
 
-  setScore(
-    data.score || {
-      team1: 0,
-      team2: 0,
-    }
-  );
+    );
 
-  setGame(
-    data.game || 1
-  );
+    setSearch(
 
-  setTeam1Name(
-    data.team1Name ||
-    "TEAM ALPHA"
-  );
+        data.search || ""
 
-  setTeam2Name(
-    data.team2Name ||
-    "TEAM BETA"
-  );
+    );
 
-  setMatchHistory(
-    data.matchHistory ||
-    []
-  );
+    setScore(
 
-setTime(
-  data.time ??
-  defaultTimer
-);
+        data.score || {
 
-setRunning(
-  data.running ??
-  false
-);
+            team1: 0,
 
-  setLastSaved(
-    data.lastSaved || null
-  );
+            team2: 0,
 
+        }
+
+    );
+
+    setGame(
+
+        data.game || 1
+
+    );
+
+    setTeam1Name(
+
+        data.team1Name ||
+
+        "TEAM ALPHA"
+
+    );
+
+    setTeam2Name(
+
+        data.team2Name ||
+
+        "TEAM BETA"
+
+    );
+
+    setTeam1Logo(
+        data.team1Logo ||
+        DefaultBlueLogo
+    );
+
+    setTeam2Logo(
+        data.team2Logo ||
+        DefaultRedLogo
+    );
+
+    setMatchHistory(
+
+        data.matchHistory ||
+
+        []
+
+    );
+
+    setTime(
+
+        data.time ??
+
+        defaultTimer
+
+    );
+
+    setRunning(
+
+        data.running ??
+
+        false
+
+    );
+
+    setLastSaved(
+
+        data.lastSaved ||
+
+        null
+
+    );
+
+    setLoaded(true);
 
 }, []);
 
@@ -406,54 +471,82 @@ Live Observer Updates
 
 useEffect(() => {
 
+    if (!loaded) {
+
+        return;
+
+    }
+
     const saveData = {
 
         draft,
+
         step,
 
         draftPool,
+
         search,
 
         score,
+
         game,
 
         team1Name,
+
         team2Name,
 
         team1Logo,
+
         team2Logo,
 
         matchHistory,
 
         time,
+
         running,
 
     };
 
-    saveDraftToStorage(saveData);
+    saveDraftToStorage(
 
-    saveDraftToFirebase(saveData);
+        saveData
+
+    );
+
+    saveDraftToFirebase(
+
+        saveData
+
+    );
 
 }, [
 
+    loaded,
+
     draft,
+
     step,
 
     draftPool,
+
     search,
 
     score,
+
     game,
 
     team1Name,
+
     team2Name,
 
     team1Logo,
+
     team2Logo,
 
     matchHistory,
 
     time,
+
     running,
 
 ]);

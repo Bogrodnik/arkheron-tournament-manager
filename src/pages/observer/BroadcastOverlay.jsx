@@ -20,6 +20,8 @@ import TeamHUD from "../../components/observer/TeamHUD";
 
 import "../../styles/observer/BroadcastOverlay.css";
 
+import BOBarPortrait from "../../assets/BO_Bar_Portrait.png";
+
 export default function BroadcastOverlay() {
 
     const [draft, setDraft] =
@@ -98,7 +100,7 @@ export default function BroadcastOverlay() {
         <div className="broadcast">
 
             <div className="broadcast-wrapper">
-
+                
                 <div className="broadcast-layout">
 
                     {

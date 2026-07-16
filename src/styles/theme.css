@@ -1,118 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap");
+
 /*
 ====================================================
 ARKHERON DESIGN SYSTEM
 ====================================================
 */
 
-:root {
+:root{
 
-/* ================================================
-   COLORS
-================================================ */
+/*==================================================
+COLORS
+==================================================*/
 
---color-bg: #08111b;
+    --color-bg:#08111B;
 
---color-surface: #0d1826;
+    --color-surface:#111A28;
 
---color-surface-light: #132235;
+    --color-surface-light:#182334;
 
---color-border: rgba(255,255,255,.08);
+    --color-panel:rgba(18,28,42,.82);
 
---color-border-light: rgba(255,255,255,.14);
+    --color-panel-solid:#172233;
 
---color-text: #f8fafc;
+    --color-border:rgba(255,255,255,.08);
 
---color-text-muted: #94a3b8;
+    --color-border-light:rgba(255,255,255,.16);
 
---color-gold: #c8ab63;
+    --color-text:#F7F3EA;
 
---color-gold-light: #d8bf82;
+    --color-text-muted:#A7B3C4;
 
---color-teal: #59c6bf;
+    --color-gold:#C6A85B;
 
---color-blue: #60a5fa;
+    --color-gold-light:#E2C983;
 
---color-red: #f87171;
+    --color-blue:#4FA9E8;
 
---color-success: #22c55e;
+    --color-blue-light:#8FD7FF;
 
---color-warning: #fbbf24;
+    --color-red:#C94B4B;
 
+    --color-red-light:#F07B7B;
 
-/* ================================================
-   RADIUS
-================================================ */
+    --color-success:#57C96E;
 
---radius-sm: 8px;
-
---radius-md: 12px;
-
---radius-lg: 16px;
-
---radius-xl: 20px;
+    --color-warning:#F2C94C;
 
 
-/* ================================================
-   SPACING
-================================================ */
+/*==================================================
+RADII
+==================================================*/
 
---space-xs: 8px;
+    --radius-sm:8px;
 
---space-sm: 12px;
+    --radius-md:12px;
 
---space-md: 16px;
+    --radius-lg:18px;
 
---space-lg: 24px;
-
---space-xl: 32px;
-
---space-2xl: 48px;
+    --radius-xl:24px;
 
 
-/* ================================================
-   SHADOWS
-================================================ */
+/*==================================================
+SPACING
+==================================================*/
 
---shadow-sm:
+    --space-xs:8px;
 
-0 4px 10px rgba(0,0,0,.20);
+    --space-sm:12px;
 
---shadow-md:
+    --space-md:16px;
 
-0 10px 24px rgba(0,0,0,.30);
+    --space-lg:24px;
 
---shadow-lg:
+    --space-xl:32px;
 
-0 18px 40px rgba(0,0,0,.45);
-
-
-/* ================================================
-   TRANSITIONS
-================================================ */
-
---transition-fast:
-
-.15s ease;
-
---transition:
-
-.25s ease;
+    --space-2xl:48px;
 
 
-/* ================================================
-   TYPOGRAPHY
-================================================ */
+/*==================================================
+SHADOWS
+==================================================*/
 
---font-title:
+    --shadow-sm:
+        0 4px 12px rgba(0,0,0,.22);
 
-Georgia,
-"Times New Roman",
-serif;
+    --shadow-md:
+        0 10px 28px rgba(0,0,0,.34);
 
---font-body:
+    --shadow-lg:
+        0 18px 42px rgba(0,0,0,.48);
 
-Inter,
-Segoe UI,
-sans-serif;
+    --shadow-glow:
+        0 0 24px rgba(198,168,91,.18);
+
+
+/*==================================================
+TRANSITIONS
+==================================================*/
+
+    --transition-fast:.15s ease;
+
+    --transition:.25s ease;
+
+    --transition-slow:.4s ease;
+
+
+/*==================================================
+TYPOGRAPHY
+==================================================*/
+
+    --font-title:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    --font-body:
+        "Source Sans 3",
+        "Segoe UI",
+        sans-serif;
+
+    --font-mono:
+        Consolas,
+        monospace;
+
+    --font-h1:3rem;
+
+    --font-h2:2.2rem;
+
+    --font-h3:1.5rem;
+
+    --font-body-size:1rem;
+
+    --font-small:.9rem;
 
 }

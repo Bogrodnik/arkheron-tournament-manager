@@ -5,26 +5,35 @@ export default function DraftBoard({
     draft,
     side = "left",
 }) {
+
     return (
+
         <div className="draft-column">
 
             {title && (
                 <h2>{title}</h2>
             )}
 
-            {draft.map(
-                (
-                    entry,
-                    index
-                ) => (
-                    <DraftSlot
-                        key={index}
-                        draft={entry}
-                        side={side}
-                    />
-                )
-            )}
+            <div className="draft-scroll">
+
+                <div className="draft-grid">
+
+                    {draft.map((entry, index) => (
+
+                        <DraftSlot
+                            key={index}
+                            draft={entry}
+                            side={side}
+                        />
+
+                    ))}
+
+                </div>
+
+            </div>
 
         </div>
+
     );
+
 }

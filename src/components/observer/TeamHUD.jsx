@@ -1,5 +1,9 @@
 import "../../styles/observer/TeamHUD.css";
 
+import TeamLogoPortrait from "../../assets/TeamLogo_Portrait.png";
+import BOBarPortrait from "../../assets/BO_Bar_Portrait.png";
+import BanPickPortrait from "../../assets/Bans_Pick_Portrait.png";
+
 export default function TeamHUD({
 
     side = "left",
@@ -99,15 +103,29 @@ export default function TeamHUD({
 
                             {settings.showLogos && (
 
-                                <img
+                                <div className="teamhud-logo-wrapper">
 
-                                    src={logo}
+                                    <img
 
-                                    alt={name}
+                                        src={logo}
 
-                                    className="teamhud-logo"
+                                        alt={name}
 
-                                />
+                                        className="teamhud-logo"
+
+                                    />
+
+                                    <img
+
+                                        src={TeamLogoPortrait}
+
+                                        alt=""
+
+                                        className="teamhud-logo-overlay"
+
+                                    />
+
+                                </div>
 
                             )}
 
@@ -143,15 +161,29 @@ export default function TeamHUD({
 
                             {settings.showLogos && (
 
-                                <img
+                                <div className="teamhud-logo-wrapper">
 
-                                    src={logo}
+                                    <img
 
-                                    alt={name}
+                                        src={logo}
 
-                                    className="teamhud-logo"
+                                        alt={name}
 
-                                />
+                                        className="teamhud-logo"
+
+                                    />
+
+                                    <img
+
+                                        src={TeamLogoPortrait}
+
+                                        alt=""
+
+                                        className="teamhud-logo-overlay"
+
+                                    />
+
+                                </div>
 
                             )}
 
@@ -228,23 +260,38 @@ export default function TeamHUD({
 
                     {displayDraft.map((entry, index) => (
 
-                        <img
-
+                        <div
                             key={index}
-
-                            src={
-                                entry.item?.image ||
-                                entry.image
-                            }
-
-                            alt={
-                                entry.item?.name ||
-                                ""
-                            }
-
                             className={`teamhud-orb ${entry.type}`}
+                        >
 
-                        />
+                            <img
+
+                                src={
+                                    entry.item?.image ||
+                                    entry.image
+                                }
+
+                                alt={
+                                    entry.item?.name ||
+                                    ""
+                                }
+
+                                className="teamhud-orb-image"
+
+                            />
+
+                            <img
+
+                                src={BanPickPortrait}
+
+                                alt=""
+
+                                className="teamhud-orb-frame"
+
+                            />
+
+                        </div>
 
                     ))}
 

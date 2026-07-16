@@ -19,11 +19,9 @@ export default function DraftTimer({
 
                 </div>
 
-                <div className="timer-value">
-
-                    {time}
-
-                </div>
+               <div className="timer-value">
+    <h1>{time}</h1>
+</div>
 
                 {showControls && (
 

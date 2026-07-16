@@ -1,136 +1,339 @@
+/*
+====================================================
+DASHBOARD
+====================================================
+*/
+
 .dashboard{
+
     display:flex;
+
     flex-direction:column;
 
-    gap:24px;
+    gap:28px;
+
 }
 
+/*
+====================================================
+HEADER
+====================================================
+*/
+
 .dashboard-header{
+
     text-align:center;
 
     padding:
+
         clamp(
-            32px,
-            4vw,
-            56px
+
+            36px,
+
+            5vw,
+
+            64px
+
         );
+
 }
 
 .dashboard-header h1{
+
+    font-family:var(--font-title);
+
     font-size:
+
         clamp(
-            2rem,
-            3vw,
-            3.5rem
+
+            2.5rem,
+
+            4vw,
+
+            4rem
+
         );
 
-    font-weight:900;
+    font-weight:700;
 
-    margin-bottom:16px;
+    color:var(--color-gold-light);
+
+    letter-spacing:.04em;
+
+    margin-bottom:14px;
+
+    text-shadow:
+
+        0 2px 18px rgba(0,0,0,.45);
+
+}
+
+.dashboard-header h1::after{
+
+    content:"";
+
+    display:block;
+
+    width:180px;
+
+    height:2px;
+
+    margin:18px auto 0;
+
+    background:
+
+        linear-gradient(
+
+            to right,
+
+            transparent,
+
+            var(--color-gold),
+
+            transparent
+
+        );
+
 }
 
 .dashboard-header p{
-    color:#94a3b8;
 
     max-width:900px;
 
     margin:auto;
 
-    line-height:1.6;
+    color:var(--color-text-muted);
+
+    line-height:1.8;
+
+    font-size:1.05rem;
+
 }
 
+/*
+====================================================
+GRID
+====================================================
+*/
+
 .dashboard-grid{
+
     display:grid;
 
     grid-template-columns:
+
         repeat(
+
             auto-fit,
+
             minmax(
+
                 320px,
+
                 1fr
+
             )
+
         );
 
     gap:24px;
+
 }
 
+/*
+====================================================
+CARDS
+====================================================
+*/
+
 .dashboard-card{
+
     display:flex;
+
     flex-direction:column;
 
     gap:18px;
 
     min-height:220px;
 
-    transition:
-        .25s ease;
+    padding:24px;
+
+    background:var(--color-panel);
+
+    border:1px solid var(--color-border);
+
+    border-radius:var(--radius-lg);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:var(--shadow-lg);
+
+    transition:var(--transition);
+
 }
 
 .dashboard-card:hover{
+
     transform:
+
         translateY(-6px);
 
     border-color:
+
         rgba(
-            59,
-            130,
-            246,
+
+            198,
+
+            168,
+
+            91,
+
             .35
+
         );
+
+    box-shadow:
+
+        var(--shadow-lg),
+
+        0 0 20px rgba(198,168,91,.08);
+
 }
 
 .dashboard-card h2{
-    font-size:1.4rem;
+
+    font-family:var(--font-title);
+
+    font-size:1.6rem;
+
+    font-weight:700;
+
+    color:var(--color-gold-light);
+
+    padding-bottom:10px;
+
+    border-bottom:
+
+        1px solid
+
+        rgba(
+
+            255,
+
+            255,
+
+            255,
+
+            .06
+
+        );
+
 }
 
 .dashboard-card p{
-    color:#94a3b8;
-
-    line-height:1.5;
 
     flex:1;
+
+    color:var(--color-text-muted);
+
+    line-height:1.7;
+
 }
 
 .dashboard-action{
-    font-weight:800;
 
-    color:#60a5fa;
+    margin-top:auto;
+
+    font-weight:700;
+
+    color:var(--color-blue-light);
+
+    transition:var(--transition);
+
 }
 
+.dashboard-card:hover .dashboard-action{
+
+    color:var(--color-gold-light);
+
+}
+
+/*
+====================================================
+DISABLED
+====================================================
+*/
+
 .dashboard-card.disabled{
+
     opacity:.55;
 
     cursor:not-allowed;
+
+}
+
+.dashboard-card.disabled:hover{
+
+    transform:none;
+
+    box-shadow:var(--shadow-lg);
+
+    border-color:var(--color-border);
+
 }
 
 .coming-soon{
+
+    color:var(--color-warning);
+
     font-weight:700;
 
-    color:#fbbf24;
+    letter-spacing:.04em;
+
+    text-transform:uppercase;
+
 }
+
+/*
+====================================================
+FOOTER
+====================================================
+*/
+
 .dashboard-footer{
+
     text-align:center;
 
     padding:
-        12px
+
+        18px
+
         0
-        8px;
+
+        10px;
 
     color:
+
         rgba(
-            148,
-            163,
-            184,
-            .65
+
+            255,
+
+            255,
+
+            255,
+
+            .45
+
         );
 
     font-size:.9rem;
 
-    font-weight:500;
 }
 
 .dashboard-author{
-    color:#60a5fa;
+
+    color:var(--color-gold-light);
 
     font-weight:700;
+
 }
