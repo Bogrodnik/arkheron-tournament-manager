@@ -41,27 +41,15 @@ body{
     color:var(--color-text);
 
     background:
+        var(--color-bg)
+        url("../assets/ARK_Creator_TitleCard_background.png")
+        center / cover
+        no-repeat
+        fixed;
 
-        linear-gradient(
-
-            rgba(8,17,27,.70),
-
-            rgba(8,17,27,.88)
-
-        ),
-
-        url("");
-
-    background-size:cover;
-
-    background-position:center;
-
-    background-repeat:no-repeat;
-
-    background-attachment:fixed;
+    overflow:hidden;
 
 }
-
 /*
 ====================================================
 LINKS

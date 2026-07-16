@@ -299,7 +299,14 @@
 
 .teamhud.left .teamhud-orbs{
 
-    margin-right:150px;
+    direction: rtl;
+
+    margin-right:60px;
+
+}
+.teamhud.left .teamhud-orb{
+
+    direction:ltr;
 
 }
 
