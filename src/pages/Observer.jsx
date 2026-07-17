@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import {
 
     listenToBroadcastSettings,
 
     updateBroadcastSettings,
+
+    listenToTournamentBroadcastSettings,
+
+    updateTournamentBroadcastSettings,
 
     DEFAULT_SETTINGS,
 
@@ -60,27 +65,47 @@ const overlays = [
 
 export default function Observer() {
 
+    const { tournamentId } = useParams();
+
     const [broadcastSettings, setBroadcastSettings] =
 
         useState(DEFAULT_SETTINGS);
 
     useEffect(() => {
 
-        const unsubscribe =
-
-            listenToBroadcastSettings(
-
+        const unsubscribe = tournamentId
+            ? listenToTournamentBroadcastSettings(
+                tournamentId,
                 setBroadcastSettings
-
+            )
+            : listenToBroadcastSettings(
+                setBroadcastSettings
             );
 
         return unsubscribe;
 
-    }, []);
+    }, [tournamentId]);
+
+    async function updateSettings(updates) {
+
+        if (tournamentId) {
+
+            await updateTournamentBroadcastSettings(
+                tournamentId,
+                updates
+            );
+
+            return;
+
+        }
+
+        await updateBroadcastSettings(updates);
+
+    }
 
     async function toggle(setting) {
 
-        await updateBroadcastSettings({
+        await updateSettings({
 
             [setting]:
 
@@ -96,7 +121,7 @@ export default function Observer() {
 
             case "minimal":
 
-                await updateBroadcastSettings({
+                await updateSettings({
 
                     ...DEFAULT_SETTINGS,
 
@@ -116,7 +141,7 @@ export default function Observer() {
 
             case "gameplay":
 
-                await updateBroadcastSettings({
+                await updateSettings({
 
                     ...DEFAULT_SETTINGS,
 
@@ -130,7 +155,7 @@ export default function Observer() {
 
             case "draft":
 
-                await updateBroadcastSettings({
+                await updateSettings({
 
                     ...DEFAULT_SETTINGS,
 
@@ -142,7 +167,7 @@ export default function Observer() {
 
             case "full":
 
-                await updateBroadcastSettings(
+                await updateSettings(
 
                     DEFAULT_SETTINGS
 
@@ -154,9 +179,21 @@ export default function Observer() {
 
     }
 
+    function getOverlayRoute(route) {
+
+        if (!tournamentId) {
+
+            return route;
+
+        }
+
+        return `${route}?tournament=${encodeURIComponent(tournamentId)}`;
+
+    }
+
     function buildUrl(route) {
 
-        return `${window.location.origin}${window.location.pathname}#${route}`;
+        return `${window.location.origin}${window.location.pathname}#${getOverlayRoute(route)}`;
 
     }
 
@@ -243,7 +280,7 @@ export default function Observer() {
 
                                 window.open(
 
-                                    `#${overlay.route}`,
+                                    `#${getOverlayRoute(overlay.route)}`,
 
                                     "_blank"
 

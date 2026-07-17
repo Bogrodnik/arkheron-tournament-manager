@@ -6,94 +6,109 @@ import {
 
 import { db } from "./firebase";
 
-const DOC_ID = "broadcast";
+const legacyBroadcastRef = doc(
+    db,
+    "broadcastSettings",
+    "broadcast"
+);
 
 export const DEFAULT_SETTINGS = {
 
     showLeftTeam: true,
     showRightTeam: true,
-
     showLogos: true,
     showNames: true,
     showScores: true,
     showSeriesBar: true,
     showPicksBans: true,
-
     showTimer: true,
     showDraftFlow: true,
 
 };
 
-const broadcastRef = doc(
+function getTournamentBroadcastRef(tournamentId) {
 
-    db,
+    return doc(
+        db,
+        "tournaments",
+        tournamentId,
+        "broadcast",
+        "config"
+    );
 
-    "broadcastSettings",
+}
 
-    DOC_ID
-
-);
-
-export function listenToBroadcastSettings(callback) {
+function listenToBroadcastDocument(reference, callback) {
 
     return onSnapshot(
-
-        broadcastRef,
-
+        reference,
         async snapshot => {
 
             if (!snapshot.exists()) {
 
                 await setDoc(
-
-                    broadcastRef,
-
+                    reference,
                     DEFAULT_SETTINGS
-
                 );
 
-                callback(
-
-                    DEFAULT_SETTINGS
-
-                );
+                callback(DEFAULT_SETTINGS);
 
                 return;
 
             }
 
             callback({
-
                 ...DEFAULT_SETTINGS,
-
                 ...snapshot.data(),
-
             });
 
         }
-
     );
 
 }
 
-export async function updateBroadcastSettings(
+// Legacy API. Keep this while existing pages use the shared live document.
+export function listenToBroadcastSettings(callback) {
 
+    return listenToBroadcastDocument(
+        legacyBroadcastRef,
+        callback
+    );
+
+}
+
+// Legacy API. Keep this while existing pages use the shared live document.
+export async function updateBroadcastSettings(updates) {
+
+    await setDoc(
+        legacyBroadcastRef,
+        updates,
+        { merge: true }
+    );
+
+}
+
+export function listenToTournamentBroadcastSettings(
+    tournamentId,
+    callback
+) {
+
+    return listenToBroadcastDocument(
+        getTournamentBroadcastRef(tournamentId),
+        callback
+    );
+
+}
+
+export async function updateTournamentBroadcastSettings(
+    tournamentId,
     updates
-
 ) {
 
     await setDoc(
-
-        broadcastRef,
-
+        getTournamentBroadcastRef(tournamentId),
         updates,
-
-        {
-
-            merge: true,
-
-        }
-
+        { merge: true }
     );
 
 }

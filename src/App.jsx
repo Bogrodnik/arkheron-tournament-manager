@@ -37,6 +37,11 @@ export default function App() {
                     />
 
                     <Route
+                        path="/draft/:tournamentId"
+                        element={<Draft />}
+                    />
+
+                    <Route
                         path="/builder"
                         element={<TeamBuilder />}
                     />
@@ -47,7 +52,19 @@ export default function App() {
                     />
 
                     <Route
+                        path="/observer/:tournamentId"
+                        element={<Observer />}
+                    />
+
+                    <Route
                         path="/settings"
+                        element={
+                            <TournamentSettings />
+                        }
+                    />
+
+                    <Route
+                        path="/settings/:tournamentId"
                         element={
                             <TournamentSettings />
                         }
@@ -61,7 +78,20 @@ export default function App() {
                     />
 
                     <Route
+                        path="/tournament-settings/:tournamentId"
+                        element={
+                            <TournamentSettings />
+                        }
+                    />
+
+                    <Route
                         path="/overlay/broadcast"
+                        element={
+                            <BroadcastOverlay />
+                        }
+                    />
+                    <Route
+                        path="/broadcast/:tournamentId"
                         element={
                             <BroadcastOverlay />
                         }

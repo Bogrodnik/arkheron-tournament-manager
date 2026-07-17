@@ -1,12 +1,30 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import {
     listenToDraft,
+    listenToTournamentDraft,
 } from "../../firebase/draftService";
 
 import "../../styles/observer/DraftOverlayV2.css";
 
+function subscribeToDraft(tournamentId, callback) {
+
+    return tournamentId
+        ? listenToTournamentDraft(
+            tournamentId,
+            callback
+        )
+        : listenToDraft(callback);
+
+}
+
 export default function DraftOverlayV2() {
+
+    const [searchParams] = useSearchParams();
+
+    const tournamentId =
+        searchParams.get("tournament");
 
     const [draftState, setDraftState] = useState(null);
 
@@ -15,7 +33,10 @@ export default function DraftOverlayV2() {
         document.body.style.background = "transparent";
         document.documentElement.style.background = "transparent";
 
-        const unsubscribe = listenToDraft(setDraftState);
+        const unsubscribe = subscribeToDraft(
+            tournamentId,
+            setDraftState
+        );
 
         return () => {
 
@@ -26,7 +47,7 @@ export default function DraftOverlayV2() {
 
         };
 
-    }, []);
+    }, [tournamentId]);
 
     if (!draftState) {
 

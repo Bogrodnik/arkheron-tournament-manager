@@ -5,13 +5,19 @@ Imports
 */
 
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import "../styles/tournamentSettings.css";
 
 import { generateDraftOrder } from "../utils/draftGenerator";
+import {
+    DEFAULT_TOURNAMENT_SETTINGS,
+} from "../defaults/tournamentDefaults";
 
 import {
     saveSettings as saveSettingsToFirebase,
+    listenToTournamentSettings,
+    saveTournamentSettings,
 } from "../firebase/settingsService";
 
 /*
@@ -20,44 +26,6 @@ Default Settings
 =========================================
 */
 
-const defaultSettings = {
-
-    tournamentName: "",
-
-    organizer: "",
-
-    seriesLength: 5,
-
-    firstTeam: 1,
-
-    swapSides: true,
-
-    draftVariant: "snake",
-
-    picksPerTeam: 3,
-
-    bansPerTeam: 1,
-
-    timerLength: 30,
-
-    customDraftOrder: [],
-
-    enabledPools: {
-
-        eternals: true,
-
-        crowns: true,
-
-        amulets: true,
-
-        weapons: true,
-
-        utility: true,
-
-    },
-
-};
-
 /*
 =========================================
 Tournament Settings Page
@@ -65,6 +33,8 @@ Tournament Settings Page
 */
 
 export default function TournamentSettings() {
+
+const { tournamentId } = useParams();
 
 /*
 =========================================
@@ -82,7 +52,7 @@ const [settings, setSettings] =
 
         if (!saved) {
 
-            return defaultSettings;
+            return DEFAULT_TOURNAMENT_SETTINGS;
 
         }
 
@@ -92,11 +62,32 @@ const [settings, setSettings] =
 
         } catch {
 
-            return defaultSettings;
+            return DEFAULT_TOURNAMENT_SETTINGS;
 
         }
 
-    });
+});
+
+/*
+=========================================
+Tournament Settings Load
+=========================================
+*/
+
+useEffect(() => {
+
+    if (!tournamentId) {
+
+        return undefined;
+
+    }
+
+    return listenToTournamentSettings(
+        tournamentId,
+        setSettings
+    );
+
+}, [tournamentId]);
 
 /*
 =========================================
@@ -114,9 +105,20 @@ useEffect(() => {
 
     );
 
-    saveSettingsToFirebase(settings);
+    if (tournamentId) {
 
-}, [settings]);
+        saveTournamentSettings(
+            tournamentId,
+            settings
+        );
+
+    } else {
+
+        saveSettingsToFirebase(settings);
+
+    }
+
+}, [settings, tournamentId]);
 
 /*
 =========================================
@@ -393,7 +395,7 @@ function resetSettings() {
     );
 
     setSettings(
-        defaultSettings
+        DEFAULT_TOURNAMENT_SETTINGS
     );
 
 }

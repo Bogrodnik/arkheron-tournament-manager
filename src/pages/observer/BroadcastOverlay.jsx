@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import {
     listenToDraft,
+    listenToTournamentDraft,
 } from "../../firebase/draftService";
 
 import {
     listenToSettings,
+    listenToTournamentSettings,
 } from "../../firebase/settingsService";
 
 import {
 
     listenToBroadcastSettings,
+
+    listenToTournamentBroadcastSettings,
 
     DEFAULT_SETTINGS,
 
@@ -22,7 +27,48 @@ import "../../styles/observer/BroadcastOverlay.css";
 
 import BOBarPortrait from "../../assets/BO_Bar_Portrait.png";
 
+function subscribeToDraft(tournamentId, callback) {
+
+    return tournamentId
+        ? listenToTournamentDraft(
+            tournamentId,
+            callback
+        )
+        : listenToDraft(callback);
+
+}
+
+function subscribeToSettings(tournamentId, callback) {
+
+    return tournamentId
+        ? listenToTournamentSettings(
+            tournamentId,
+            callback
+        )
+        : listenToSettings(callback);
+
+}
+
+function subscribeToBroadcastSettings(
+    tournamentId,
+    callback
+) {
+
+    return tournamentId
+        ? listenToTournamentBroadcastSettings(
+            tournamentId,
+            callback
+        )
+        : listenToBroadcastSettings(callback);
+
+}
+
 export default function BroadcastOverlay() {
+
+    const [searchParams] = useSearchParams();
+
+    const tournamentId =
+        searchParams.get("tournament");
 
     const [draft, setDraft] =
         useState(null);
@@ -42,13 +88,20 @@ export default function BroadcastOverlay() {
             "transparent";
 
         const unsubscribeDraft =
-            listenToDraft(setDraft);
+            subscribeToDraft(
+                tournamentId,
+                setDraft
+            );
 
         const unsubscribeSettings =
-            listenToSettings(setSettings);
+            subscribeToSettings(
+                tournamentId,
+                setSettings
+            );
 
         const unsubscribeBroadcast =
-            listenToBroadcastSettings(
+            subscribeToBroadcastSettings(
+                tournamentId,
                 setBroadcastSettings
             );
 
@@ -68,7 +121,7 @@ export default function BroadcastOverlay() {
 
         };
 
-    }, []);
+    }, [tournamentId]);
 
     if (
 

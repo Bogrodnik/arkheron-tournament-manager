@@ -258,6 +258,38 @@ CARDS
 
 }
 
+.dashboard-card-link{
+
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    flex:1;
+    color:inherit;
+    text-decoration:none;
+
+}
+
+.dashboard-delete-button{
+
+    align-self:flex-start;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.04);
+    color:var(--color-text-muted);
+    padding:8px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:var(--transition);
+
+}
+
+.dashboard-delete-button:hover{
+
+    border-color:rgba(255,0,0,.35);
+    color:var(--color-gold-light);
+    background:rgba(255,0,0,.08);
+
+}
+
 /*
 ====================================================
 DISABLED
@@ -335,5 +367,120 @@ FOOTER
     color:var(--color-gold-light);
 
     font-weight:700;
+
+}
+
+.dashboard-create-button{
+
+    margin-top:24px;
+
+    padding:12px 22px;
+
+    border:1px solid var(--color-gold);
+
+    border-radius:var(--radius-md);
+
+    background:var(--color-gold);
+
+    color:var(--color-bg);
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.tournament-list-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+}
+
+.tournament-list-header h2{
+
+    font-family:var(--font-title);
+
+    color:var(--color-gold-light);
+
+}
+
+.tournament-list-header span,
+.tournament-status{
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    background:rgba(198,168,91,.15);
+
+    color:var(--color-gold-light);
+
+    font-size:.8rem;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+
+.tournament-card{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+.tournament-card-header{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:16px;
+
+}
+
+.tournament-dates{
+
+    display:grid;
+
+    gap:12px;
+
+}
+
+.tournament-dates div{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+.tournament-dates span{
+
+    color:var(--color-text-muted);
+
+    font-size:.8rem;
+
+    text-transform:uppercase;
+
+}
+
+.tournament-empty{
+
+    padding:28px;
+
+    color:var(--color-text-muted);
+
+    text-align:center;
 
 }

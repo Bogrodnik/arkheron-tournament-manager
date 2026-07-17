@@ -3,9 +3,21 @@
 Imports
 =========================================
 */
-import {saveDraftState as saveDraftToFirebase,} from "../firebase/draftService";
+import {
+  saveDraftState as saveDraftToFirebase,
+  saveTournamentDraftState,
+  listenToTournamentDraft,
+} from "../firebase/draftService";
+import {
+  listenToTournamentSettings,
+} from "../firebase/settingsService";
+import {
+  createDefaultDraftState,
+  DEFAULT_TOURNAMENT_SETTINGS,
+} from "../defaults/tournamentDefaults";
 import { generateDraftOrder } from "../utils/draftGenerator";
 import { useState, useMemo, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import DraftBoard from "../components/draft/DraftBoard";
 import DraftFlow from "../components/draft/DraftFlow";
@@ -24,9 +36,6 @@ import { utilityItems } from "../data/utilityItems";
 import {saveDraftToStorage,loadDraftFromStorage,clearDraftStorage,} from "../utils/draftStorage";
 import "../styles/Draft.css";
 
-import DefaultBlueLogo from "../assets/Logo_default_Blue.png";
-import DefaultRedLogo from "../assets/Logo_default_Red.png";
-
 export default function Draft() {
 /*
 =========================================
@@ -34,23 +43,28 @@ Draft Component
 =========================================
 */
 
+const { tournamentId } = useParams();
+
 /*
 =========================================
 Draft State
 =========================================
 */
 
+const initialDraftState =
+  createDefaultDraftState();
+
 const [draftPool, setDraftPool] =
-    useState("eternals");
+    useState(initialDraftState.draftPool);
 
 const [search, setSearch] =
-    useState("");
+    useState(initialDraftState.search);
 
 const [draft, setDraft] =
-    useState([]);
+    useState(initialDraftState.draft);
 
 const [step, setStep] =
-    useState(0);
+    useState(initialDraftState.step);
 
 /*
 =========================================
@@ -60,36 +74,59 @@ Load State
 
 const [loaded, setLoaded] =
     useState(false);
+
+const [draftLoaded, setDraftLoaded] =
+    useState(false);
 /*
 =========================================
 Tournament Settings
 =========================================
 */
 
-const tournamentSettings =
+const legacyTournamentSettings =
+  !tournamentId &&
   JSON.parse(
     localStorage.getItem(
       "tournamentSettings"
     )
   ) || {};
 
+const [tournamentSettings, setTournamentSettings] =
+  useState({});
+
+useEffect(() => {
+
+  if (!tournamentId) {
+
+    return undefined;
+
+  }
+
+  setTournamentSettings({});
+
+  return listenToTournamentSettings(
+    tournamentId,
+    setTournamentSettings
+  );
+
+}, [tournamentId]);
+
+const activeTournamentSettings =
+  tournamentId
+    ? tournamentSettings
+    : legacyTournamentSettings;
+
 const {
-  seriesLength = 5,
-  firstTeam = 1,
-  swapSides = true,
-  draftVariant = "snake",
-  picksPerTeam = 3,
-  bansPerTeam = 1,
-  timerLength = 30,
-  enabledPools = {
-    eternals: true,
-    crowns: true,
-    amulets: true,
-    weapons: true,
-    utility: true
-  },
-  customDraftOrder = [],
-} = tournamentSettings;
+  seriesLength = DEFAULT_TOURNAMENT_SETTINGS.seriesLength,
+  firstTeam = DEFAULT_TOURNAMENT_SETTINGS.firstTeam,
+  swapSides = DEFAULT_TOURNAMENT_SETTINGS.swapSides,
+  draftVariant = DEFAULT_TOURNAMENT_SETTINGS.draftVariant,
+  picksPerTeam = DEFAULT_TOURNAMENT_SETTINGS.picksPerTeam,
+  bansPerTeam = DEFAULT_TOURNAMENT_SETTINGS.bansPerTeam,
+  timerLength = DEFAULT_TOURNAMENT_SETTINGS.timerLength,
+  enabledPools = DEFAULT_TOURNAMENT_SETTINGS.enabledPools,
+  customDraftOrder = DEFAULT_TOURNAMENT_SETTINGS.customDraftOrder,
+} = activeTournamentSettings;
 
 const draftOrder =
   draftVariant === "custom"
@@ -121,10 +158,10 @@ Team State
 */
 
 const [team1Name, setTeam1Name] =
-  useState("TEAM ALPHA");
+  useState(initialDraftState.team1Name);
 
 const [team2Name, setTeam2Name] =
-  useState("TEAM BETA");
+  useState(initialDraftState.team2Name);
 
   /*
 =========================================
@@ -132,10 +169,10 @@ Logo State
 =========================================
 */
 const [team1Logo, setTeam1Logo] =
-  useState(DefaultBlueLogo);
+  useState(initialDraftState.team1Logo);
 
 const [team2Logo, setTeam2Logo] =
-  useState(DefaultRedLogo);
+  useState(initialDraftState.team2Logo);
 
 /*
 =========================================
@@ -180,17 +217,14 @@ Series State
 */
 
 const [score, setScore] =
-  useState({
-    team1: 0,
-    team2: 0,
-  });
+  useState(initialDraftState.score);
 
 const [game, setGame] =
-  useState(1);
+  useState(initialDraftState.game);
 
 const [matchHistory,
   setMatchHistory] =
-  useState([]);
+  useState(initialDraftState.matchHistory);
 
 /*
 =========================================
@@ -337,25 +371,79 @@ Load Save Effect
 
 useEffect(() => {
 
-    const saved =
+    if (tournamentId) {
 
-        localStorage.getItem(
+        const unsubscribe = listenToTournamentDraft(
+            tournamentId,
+            draftData => {
 
-            "arkheronDraftState"
+                if (!draftData) {
 
+                    const storageKey = `arkheronDraftState:${tournamentId}`;
+                    const cached = localStorage.getItem(storageKey);
+
+                    if (cached) {
+
+                        const data = JSON.parse(cached);
+
+                        setDraft(data.draft || []);
+                        setStep(data.step || 0);
+                        setDraftPool(data.draftPool || "eternals");
+                        setSearch(data.search || "");
+                        setScore(data.score || { team1: 0, team2: 0 });
+                        setGame(data.game || 1);
+                        setTeam1Name(data.team1Name || "TEAM ALPHA");
+                        setTeam2Name(data.team2Name || "TEAM BETA");
+                        setTeam1Logo(data.team1Logo || initialDraftState.team1Logo);
+                        setTeam2Logo(data.team2Logo || initialDraftState.team2Logo);
+                        setMatchHistory(data.matchHistory || []);
+                        setTime(data.time ?? defaultTimer);
+                        setRunning(data.running ?? false);
+                        setLastSaved(data.lastSaved || null);
+
+                    }
+
+                    setDraftLoaded(true);
+                    setLoaded(true);
+                    return;
+
+                }
+
+                setDraft(draftData.draft || []);
+                setStep(draftData.step || 0);
+                setDraftPool(draftData.draftPool || "eternals");
+                setSearch(draftData.search || "");
+                setScore(draftData.score || { team1: 0, team2: 0 });
+                setGame(draftData.game || 1);
+                setTeam1Name(draftData.team1Name || "TEAM ALPHA");
+                setTeam2Name(draftData.team2Name || "TEAM BETA");
+                setTeam1Logo(draftData.team1Logo || initialDraftState.team1Logo);
+                setTeam2Logo(draftData.team2Logo || initialDraftState.team2Logo);
+                setMatchHistory(draftData.matchHistory || []);
+                setTime(draftData.time ?? defaultTimer);
+                setRunning(draftData.running ?? false);
+                setLastSaved(draftData.lastSaved || null);
+                setDraftLoaded(true);
+                setLoaded(true);
+            }
         );
+
+        return unsubscribe;
+
+    }
+
+    const storageKey = "arkheronDraftState";
+    const saved = localStorage.getItem(storageKey);
 
     if (!saved) {
 
         setLoaded(true);
-
-        return;
+        setDraftLoaded(true);
+        return undefined;
 
     }
 
-    const data =
-
-        JSON.parse(saved);
+    const data = JSON.parse(saved);
 
     setDraft(
 
@@ -419,12 +507,12 @@ useEffect(() => {
 
     setTeam1Logo(
         data.team1Logo ||
-        DefaultBlueLogo
+        initialDraftState.team1Logo
     );
 
     setTeam2Logo(
         data.team2Logo ||
-        DefaultRedLogo
+        initialDraftState.team2Logo
     );
 
     setMatchHistory(
@@ -460,8 +548,11 @@ useEffect(() => {
     );
 
     setLoaded(true);
+    setDraftLoaded(true);
 
-}, []);
+    return undefined;
+
+}, [tournamentId]);
 
 /*
 =========================================
@@ -471,7 +562,7 @@ Live Observer Updates
 
 useEffect(() => {
 
-    if (!loaded) {
+    if (!loaded || !draftLoaded) {
 
         return;
 
@@ -509,15 +600,25 @@ useEffect(() => {
 
     saveDraftToStorage(
 
-        saveData
+        saveData,
+        tournamentId
 
     );
 
-    saveDraftToFirebase(
+    if (tournamentId) {
 
-        saveData
+        saveTournamentDraftState(
+            tournamentId,
+            saveData
+        );
 
-    );
+    } else {
+
+        saveDraftToFirebase(
+            saveData
+        );
+
+    }
 
 }, [
 
@@ -548,6 +649,8 @@ useEffect(() => {
     time,
 
     running,
+
+    tournamentId,
 
 ]);
 
@@ -1004,13 +1107,13 @@ return (
     <div className="series-title-block">
 
         <h1 className="series-tournament-name">
-            {tournamentSettings.tournamentName ||
+            {activeTournamentSettings.tournamentName ||
                 "Arkheron Tournament"}
         </h1>
 
-        {tournamentSettings.organizer && (
+        {activeTournamentSettings.organizer && (
             <div className="series-organizer">
-                {tournamentSettings.organizer}
+                {activeTournamentSettings.organizer}
             </div>
         )}
 

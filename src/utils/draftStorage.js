@@ -6,16 +6,24 @@ Draft Storage
 
 const STORAGE_KEY = "arkheronDraftState";
 
+function getStorageKey(tournamentId) {
+
+    return tournamentId
+        ? `${STORAGE_KEY}:${tournamentId}`
+        : STORAGE_KEY;
+
+}
+
 /*
 =========================================
 Save
 =========================================
 */
 
-export function saveDraftToStorage(data) {
+export function saveDraftToStorage(data, tournamentId) {
 
     localStorage.setItem(
-        STORAGE_KEY,
+        getStorageKey(tournamentId),
         JSON.stringify(data)
     );
 
@@ -27,12 +35,10 @@ Load
 =========================================
 */
 
-export function loadDraftFromStorage() {
+export function loadDraftFromStorage(tournamentId) {
 
-    const saved =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
+    const storageKey = getStorageKey(tournamentId);
+    const saved = localStorage.getItem(storageKey);
 
     if (!saved) {
         return null;
@@ -58,10 +64,10 @@ Clear
 =========================================
 */
 
-export function clearDraftStorage() {
+export function clearDraftStorage(tournamentId) {
 
     localStorage.removeItem(
-        STORAGE_KEY
+        getStorageKey(tournamentId)
     );
 
 }

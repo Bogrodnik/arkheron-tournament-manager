@@ -1,56 +1,154 @@
+import { useEffect, useState } from "react";
+import {
+    Link,
+    useNavigate,
+} from "react-router-dom";
+
+import {
+    createTournament,
+    deleteTournament,
+    listenToTournaments,
+} from "../firebase/tournamentService";
+
 import "../styles/Dashboard.css";
-import { Link } from "react-router-dom";
 
-const pages = [
+function getTimestampValue(timestamp) {
 
-    {
-        title: "🎴 Draft",
-        description:
-            "Run tournament drafts with customizable pick and ban orders, timers, team logos, and automatic save recovery.",
-        path: "/draft",
-    },
+    if (!timestamp) {
 
-    {
-        title: "⚔️ Team Builder",
-        description:
-            "Create tournament loadouts and experiment with different Eternal combinations.",
-        path: "/builder",
-        disabled: true,
-    },
+        return 0;
 
-    {
-        title: "📺 Observer",
-        description:
-            "Launch browser source overlays for OBS including the live scoreboard and draft overlay.",
-        path: "/observer",
-    },
+    }
 
-    {
-        title: "🏆 Tournament Manager",
-        description:
-            "Create tournaments, manage teams, brackets and match progression.",
-        path: "/tournament",
-        disabled: true,
-    },
+    if (typeof timestamp.toMillis === "function") {
 
-    {
-        title: "📊 Statistics",
-        description:
-            "Analyze pick rates, bans, team performance and tournament trends.",
-        path: "/stats",
-        disabled: true,
-    },
+        return timestamp.toMillis();
 
-    {
-        title: "⚙️ Settings",
-        description:
-            "Configure tournament defaults, draft rules and application preferences.",
-        path: "/settings",
-    },
+    }
 
-];
+    return new Date(timestamp).getTime() || 0;
+
+}
+
+function formatDate(timestamp) {
+
+    if (!timestamp) {
+
+        return "Pending";
+
+    }
+
+    const date =
+        typeof timestamp.toDate === "function"
+            ? timestamp.toDate()
+            : new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "Pending";
+
+    }
+
+    return date.toLocaleString();
+
+}
 
 export default function Dashboard() {
+
+    const navigate = useNavigate();
+
+    const [tournaments, setTournaments] =
+        useState([]);
+
+    useEffect(() => {
+
+        return listenToTournaments(
+            setTournaments
+        );
+
+    }, []);
+
+    async function handleCreateTournament() {
+
+        const name = window.prompt(
+            "Tournament name:"
+        );
+
+        const tournamentName = name?.trim();
+
+        if (!tournamentName) {
+
+            return;
+
+        }
+
+        try {
+
+            const tournamentId =
+                await createTournament(
+                    tournamentName
+                );
+
+            navigate(
+                `/draft/${tournamentId}`
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to create tournament:",
+                error
+            );
+
+        }
+
+    }
+
+    async function handleDeleteTournament(
+        event,
+        tournament
+    ) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const tournamentName =
+            tournament.name ||
+            "Untitled Tournament";
+
+        const confirmed = window.confirm(
+            `Delete "${tournamentName}"?\nThis will remove the tournament and all related draft, settings, and broadcast data.`
+        );
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+        try {
+
+            await deleteTournament(
+                tournament.id
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to delete tournament:",
+                error
+            );
+
+        }
+
+    }
+
+    const sortedTournaments =
+        [...tournaments].sort(
+            (first, second) =>
+                getTimestampValue(second.updatedAt) -
+                getTimestampValue(first.updatedAt)
+        );
 
     return (
 
@@ -63,63 +161,124 @@ export default function Dashboard() {
                 </h1>
 
                 <p>
-
-                    A lightweight tournament management application for
-                    Arkheron events. Designed for community tournaments,
-                    custom leagues and live broadcasts.
-
+                    Create and manage live tournament drafts.
                 </p>
+
+                <button
+                    className="dashboard-create-button"
+                    onClick={handleCreateTournament}
+                >
+                    New Tournament
+                </button>
 
             </div>
 
-            <div className="dashboard-grid">
+            <div className="tournament-list-header">
 
-                {pages.map((page) =>
+                <h2>
+                    Tournaments
+                </h2>
 
-                    page.disabled ? (
+                <span>
+                    {sortedTournaments.length}
+                </span>
 
-                        <div
-                            key={page.title}
-                            className="dashboard-card card disabled"
-                        >
+            </div>
 
-                            <h2>{page.title}</h2>
+            {sortedTournaments.length === 0 ? (
 
-                            <p>{page.description}</p>
+                <div className="tournament-empty card">
 
-                            <span className="coming-soon">
+                    No tournaments yet. Create one to begin.
 
-                                Coming Soon
+                </div>
 
-                            </span>
+            ) : (
 
-                        </div>
+                <div className="dashboard-grid">
 
-                    ) : (
+                    {sortedTournaments.map(
+                        tournament => (
 
-                        <Link
-                            key={page.title}
-                            to={page.path}
-                            className="dashboard-card card"
-                        >
+                            <div
+                                key={tournament.id}
+                                className="dashboard-card tournament-card card"
+                            >
 
-                            <h2>{page.title}</h2>
+                                <Link
+                                    to={`/draft/${tournament.id}`}
+                                    className="dashboard-card-link"
+                                >
 
-                            <p>{page.description}</p>
+                                    <div className="tournament-card-header">
 
-                            <div className="dashboard-action">
+                                        <h2>
+                                            {tournament.name ||
+                                                "Untitled Tournament"}
+                                        </h2>
 
-                                Open →
+                                        <span className="tournament-status">
+                                            {tournament.status ||
+                                                "Active"}
+                                        </span>
+
+                                    </div>
+
+                                    <div className="tournament-dates">
+
+                                        <div>
+
+                                            <span>Created</span>
+
+                                            <strong>
+                                                {formatDate(
+                                                    tournament.createdAt
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                        <div>
+
+                                            <span>Last Updated</span>
+
+                                            <strong>
+                                                {formatDate(
+                                                    tournament.updatedAt
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className="dashboard-action">
+                                        Open Draft →
+                                    </div>
+
+                                </Link>
+
+                                <button
+                                    type="button"
+                                    className="dashboard-delete-button"
+                                    onClick={(event) =>
+                                        handleDeleteTournament(
+                                            event,
+                                            tournament
+                                        )
+                                    }
+                                >
+                                    Delete
+                                </button>
 
                             </div>
 
-                        </Link>
+                        )
+                    )}
 
-                    )
+                </div>
 
-                )}
-
-            </div>
+            )}
 
             <div className="dashboard-footer">
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import DraftBoard from "../../components/draft/DraftBoard";
 import DraftFlow from "../../components/draft/DraftFlow";
@@ -9,15 +10,19 @@ import { getActionText } from "../../draftLogic";
 
 import {
     listenToDraft,
+    listenToTournamentDraft,
 } from "../../firebase/draftService";
 
 import {
     listenToSettings,
+    listenToTournamentSettings,
 } from "../../firebase/settingsService";
 
 import {
 
     listenToBroadcastSettings,
+
+    listenToTournamentBroadcastSettings,
 
     DEFAULT_SETTINGS,
 
@@ -25,7 +30,48 @@ import {
 
 import "../../styles/observer/DraftOverlay.css";
 
+function subscribeToDraft(tournamentId, callback) {
+
+    return tournamentId
+        ? listenToTournamentDraft(
+            tournamentId,
+            callback
+        )
+        : listenToDraft(callback);
+
+}
+
+function subscribeToSettings(tournamentId, callback) {
+
+    return tournamentId
+        ? listenToTournamentSettings(
+            tournamentId,
+            callback
+        )
+        : listenToSettings(callback);
+
+}
+
+function subscribeToBroadcastSettings(
+    tournamentId,
+    callback
+) {
+
+    return tournamentId
+        ? listenToTournamentBroadcastSettings(
+            tournamentId,
+            callback
+        )
+        : listenToBroadcastSettings(callback);
+
+}
+
 export default function DraftOverlay() {
+
+    const [searchParams] = useSearchParams();
+
+    const tournamentId =
+        searchParams.get("tournament");
 
     const [draftState, setDraftState] =
         useState(null);
@@ -45,13 +91,20 @@ export default function DraftOverlay() {
             "transparent";
 
         const unsubscribeDraft =
-            listenToDraft(setDraftState);
+            subscribeToDraft(
+                tournamentId,
+                setDraftState
+            );
 
         const unsubscribeSettings =
-            listenToSettings(setSettings);
+            subscribeToSettings(
+                tournamentId,
+                setSettings
+            );
 
         const unsubscribeBroadcast =
-            listenToBroadcastSettings(
+            subscribeToBroadcastSettings(
+                tournamentId,
                 setBroadcastSettings
             );
 
@@ -69,7 +122,7 @@ export default function DraftOverlay() {
 
         };
 
-    }, []);
+    }, [tournamentId]);
 
     if (
 

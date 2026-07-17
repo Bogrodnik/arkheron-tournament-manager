@@ -1,34 +1,48 @@
 import {
     doc,
-    setDoc,
     onSnapshot,
+    setDoc,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
 
-const draftRef =
+const legacyDraftRef =
     doc(
         db,
         "live",
         "draft"
     );
 
-let saveTimeout = null;
+let legacySaveTimeout = null;
+let tournamentSaveTimeout = null;
 
+function getTournamentDraftRef(tournamentId) {
+
+    return doc(
+        db,
+        "tournaments",
+        tournamentId,
+        "draft",
+        "state"
+    );
+
+}
+
+// Legacy API. Keep this while existing pages use the shared live document.
 export function saveDraftState(state) {
 
-    if (saveTimeout) {
+    if (legacySaveTimeout) {
 
-        clearTimeout(saveTimeout);
+        clearTimeout(legacySaveTimeout);
 
     }
 
-    saveTimeout = setTimeout(async () => {
+    legacySaveTimeout = setTimeout(async () => {
 
         try {
 
             await setDoc(
-                draftRef,
+                legacyDraftRef,
                 state
             );
 
@@ -45,25 +59,21 @@ export function saveDraftState(state) {
 
 }
 
+// Legacy API. Keep this while existing pages use the shared live document.
 export function listenToDraft(callback) {
 
     return onSnapshot(
-
-        draftRef,
-
-        (snapshot) => {
+        legacyDraftRef,
+        snapshot => {
 
             if (snapshot.exists()) {
 
-                callback(
-                    snapshot.data()
-                );
+                callback(snapshot.data());
 
             }
 
         },
-
-        (error) => {
+        error => {
 
             console.error(
                 "Firestore listener error:",
@@ -71,7 +81,67 @@ export function listenToDraft(callback) {
             );
 
         }
+    );
 
+}
+
+export function saveTournamentDraftState(
+    tournamentId,
+    state
+) {
+
+    if (tournamentSaveTimeout) {
+
+        clearTimeout(tournamentSaveTimeout);
+
+    }
+
+    tournamentSaveTimeout = setTimeout(async () => {
+
+        try {
+
+            await setDoc(
+                getTournamentDraftRef(tournamentId),
+                state
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to save tournament draft:",
+                error
+            );
+
+        }
+
+    }, 250);
+
+}
+
+export function listenToTournamentDraft(
+    tournamentId,
+    callback
+) {
+
+    return onSnapshot(
+        getTournamentDraftRef(tournamentId),
+        snapshot => {
+
+            if (snapshot.exists()) {
+
+                callback(snapshot.data());
+
+            }
+
+        },
+        error => {
+
+            console.error(
+                "Tournament draft listener error:",
+                error
+            );
+
+        }
     );
 
 }
