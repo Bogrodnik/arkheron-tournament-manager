@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-    Link,
     useNavigate,
 } from "react-router-dom";
 
@@ -9,6 +8,8 @@ import {
     deleteTournament,
     listenToTournaments,
 } from "../firebase/tournamentService";
+import { buildTournamentAwarePath } from "../utils/tournamentRoutes";
+import { getTournamentNavigationState } from "../utils/tournamentNavigationState";
 
 import "../styles/Dashboard.css";
 
@@ -53,6 +54,41 @@ function formatDate(timestamp) {
 
 }
 
+function getTournamentEntryPath(tournamentId) {
+
+    const navigationState =
+        getTournamentNavigationState(tournamentId);
+
+    switch (navigationState.lastVisitedPage) {
+
+        case "draft":
+            return buildTournamentAwarePath(
+                "/draft",
+                tournamentId
+            );
+
+        case "observer":
+            return buildTournamentAwarePath(
+                "/observer",
+                tournamentId
+            );
+
+        case "settings":
+            return buildTournamentAwarePath(
+                "/settings",
+                tournamentId
+            );
+
+        default:
+            return buildTournamentAwarePath(
+                "/settings",
+                tournamentId
+            );
+
+    }
+
+}
+
 export default function Dashboard() {
 
     const navigate = useNavigate();
@@ -90,7 +126,7 @@ export default function Dashboard() {
                 );
 
             navigate(
-                `/draft/${tournamentId}`
+                `/settings/${tournamentId}`
             );
 
         } catch (error) {
@@ -150,6 +186,12 @@ export default function Dashboard() {
                 getTimestampValue(first.updatedAt)
         );
 
+    function handleOpenTournament(tournamentId) {
+
+        navigate(getTournamentEntryPath(tournamentId));
+
+    }
+
     return (
 
         <div className="dashboard">
@@ -205,10 +247,7 @@ export default function Dashboard() {
                                 className="dashboard-card tournament-card card"
                             >
 
-                                <Link
-                                    to={`/draft/${tournament.id}`}
-                                    className="dashboard-card-link"
-                                >
+                                <div className="dashboard-card-link">
 
                                     <div className="tournament-card-header">
 
@@ -252,11 +291,23 @@ export default function Dashboard() {
 
                                     </div>
 
-                                    <div className="dashboard-action">
-                                        Open Draft →
-                                    </div>
+                                </div>
 
-                                </Link>
+                                <div className="dashboard-actions">
+
+                                    <button
+                                        type="button"
+                                        className="primary-button"
+                                        onClick={() =>
+                                            handleOpenTournament(
+                                                tournament.id
+                                            )
+                                        }
+                                    >
+                                        Open Tournament
+                                    </button>
+
+                                </div>
 
                                 <button
                                     type="button"

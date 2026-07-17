@@ -62,6 +62,16 @@ function listenToBroadcastDocument(reference, callback) {
                 ...snapshot.data(),
             });
 
+        },
+        error => {
+
+            console.error(
+                "Broadcast settings listener error:",
+                error
+            );
+
+            callback(DEFAULT_SETTINGS);
+
         }
     );
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import {
@@ -29,7 +29,7 @@ const overlays = [
 
             "Displays live team names, logos, match score, current game and series information.",
 
-        route: "/overlay/broadcast",
+        route: "/overlay",
 
     },
 
@@ -43,7 +43,7 @@ const overlays = [
 
             "Minimal gameplay overlay showing live picks and bans.",
 
-        route: "/overlay/draft-v2",
+        route: "/overlay-v2",
 
     },
 
@@ -63,13 +63,70 @@ const overlays = [
 
 ];
 
+const broadcastPresets = {
+
+    minimal: {
+        ...DEFAULT_SETTINGS,
+        showLogos: false,
+        showSeriesBar: false,
+        showPicksBans: false,
+        showTimer: false,
+        showDraftFlow: false,
+    },
+    gameplay: {
+        ...DEFAULT_SETTINGS,
+        showTimer: false,
+        showDraftFlow: false,
+    },
+    draft: {
+        ...DEFAULT_SETTINGS,
+        showSeriesBar: false,
+    },
+    full: {
+        ...DEFAULT_SETTINGS,
+    },
+
+};
+
 export default function Observer() {
 
     const { tournamentId } = useParams();
 
+    const generatedRoutes = useMemo(() => {
+
+        const encodedTournamentId = tournamentId
+            ? encodeURIComponent(tournamentId)
+            : "";
+
+        const suffix = encodedTournamentId
+            ? `/${encodedTournamentId}`
+            : "";
+
+        return {
+            draft: `/draft${suffix}`,
+            settings: `/settings${suffix}`,
+            overlay: `/overlay${suffix}`,
+            overlayV2: `/overlay-v2${suffix}`,
+            draftOverlay: `/overlay/draft${suffix}`,
+        };
+
+    }, [tournamentId]);
+
     const [broadcastSettings, setBroadcastSettings] =
 
         useState(DEFAULT_SETTINGS);
+
+    const activePreset = useMemo(() => {
+
+        return Object.entries(broadcastPresets).find(
+            ([, presetSettings]) =>
+                Object.entries(presetSettings).every(
+                    ([key, value]) =>
+                        broadcastSettings[key] === value
+                )
+        )?.[0] || null;
+
+    }, [broadcastSettings]);
 
     useEffect(() => {
 
@@ -117,77 +174,40 @@ export default function Observer() {
 
     async function setPreset(preset) {
 
-        switch (preset) {
+        const presetSettings =
+            broadcastPresets[preset];
 
-            case "minimal":
+        if (!presetSettings) {
 
-                await updateSettings({
-
-                    ...DEFAULT_SETTINGS,
-
-                    showLogos: false,
-
-                    showSeriesBar: false,
-
-                    showPicksBans: false,
-
-                    showTimer: false,
-
-                    showDraftFlow: false,
-
-                });
-
-                break;
-
-            case "gameplay":
-
-                await updateSettings({
-
-                    ...DEFAULT_SETTINGS,
-
-                    showTimer: false,
-
-                    showDraftFlow: false,
-
-                });
-
-                break;
-
-            case "draft":
-
-                await updateSettings({
-
-                    ...DEFAULT_SETTINGS,
-
-                    showSeriesBar: false,
-
-                });
-
-                break;
-
-            case "full":
-
-                await updateSettings(
-
-                    DEFAULT_SETTINGS
-
-                );
-
-                break;
+            return;
 
         }
+
+        await updateSettings(presetSettings);
 
     }
 
     function getOverlayRoute(route) {
 
-        if (!tournamentId) {
+        if (route === "/overlay") {
 
-            return route;
+            return generatedRoutes.overlay;
 
         }
 
-        return `${route}?tournament=${encodeURIComponent(tournamentId)}`;
+        if (route === "/overlay-v2") {
+
+            return generatedRoutes.overlayV2;
+
+        }
+
+        if (route === "/overlay/draft") {
+
+            return generatedRoutes.draftOverlay;
+
+        }
+
+        return route;
 
     }
 
@@ -226,6 +246,291 @@ export default function Observer() {
 
         </div>
 
+        <div className="observer-card observer-control-card">
+
+            <div className="observer-control-header">
+
+                <div>
+
+                    <h2>
+                        Broadcast Controls
+                    </h2>
+
+                    <p>
+                        Choose a preset and fine-tune what the live broadcast overlays display.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div className="observer-control-groups">
+
+                <section className="observer-control-section">
+
+                    <h3>
+                        Broadcast Presets
+                    </h3>
+
+                    <div className="observer-actions observer-presets">
+
+                        {Object.keys(broadcastPresets).map(
+                            preset => (
+
+                                <button
+                                    key={preset}
+                                    className={`observer-preset-button ${
+                                        activePreset === preset
+                                            ? "observer-preset-button-active"
+                                            : "observer-preset-button-inactive"
+                                    }`}
+                                    aria-pressed={activePreset === preset}
+                                    onClick={() =>
+                                        setPreset(preset)
+                                    }
+                                >
+                                    {preset.charAt(0).toUpperCase() + preset.slice(1)}
+                                </button>
+
+                            )
+                        )}
+
+                    </div>
+
+                </section>
+
+                <section className="observer-control-section">
+
+                    <h3>
+                        Broadcast Controls
+                    </h3>
+
+                    <div className="broadcast-controls">
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showLeftTeam}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showLeftTeam"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Left Team
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showRightTeam}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showRightTeam"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Right Team
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showLogos}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showLogos"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Team Logos
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showNames}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showNames"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Team Names
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showScores}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showScores"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Scores
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showSeriesBar}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showSeriesBar"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Series Progress
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showPicksBans}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showPicksBans"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Picks / Bans
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showTimer}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showTimer"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Draft Timer
+
+                        </label>
+
+                        <label>
+
+                            <input
+
+                                type="checkbox"
+
+                                checked={broadcastSettings.showDraftFlow}
+
+                                onChange={() =>
+
+                                    toggle(
+
+                                        "showDraftFlow"
+
+                                    )
+
+                                }
+
+                            />
+
+                            Draft Flow
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
         <div className="observer-grid">
 
             {overlays.map(overlay => (
@@ -234,11 +539,7 @@ export default function Observer() {
 
                     key={overlay.route}
 
-                    className={`observer-card ${
-                        overlay.route === "/overlay/broadcast"
-                            ? "broadcast-card"
-                            : ""
-                    }`}
+                    className="observer-card observer-overlay-card"
 
                 >
 
@@ -315,354 +616,6 @@ export default function Observer() {
                         </button>
 
                     </div>
-
-                    {overlay.route === "/overlay/broadcast" && (
-
-                        <>
-
-                            <hr
-
-                                style={{
-
-                                    margin: "18px 0",
-
-                                    opacity: .15,
-
-                                }}
-
-                            />
-
-                            <h3>
-
-                                Broadcast Presets
-
-                            </h3>
-
-                            <div className="observer-actions">
-
-                                <button
-
-                                    className="secondary-button"
-
-                                    onClick={() =>
-
-                                        setPreset(
-
-                                            "minimal"
-
-                                        )
-
-                                    }
-
-                                >
-
-                                    Minimal
-
-                                </button>
-
-                                <button
-
-                                    className="secondary-button"
-
-                                    onClick={() =>
-
-                                        setPreset(
-
-                                            "gameplay"
-
-                                        )
-
-                                    }
-
-                                >
-
-                                    Gameplay
-
-                                </button>
-
-                                <button
-
-                                    className="secondary-button"
-
-                                    onClick={() =>
-
-                                        setPreset(
-
-                                            "draft"
-
-                                        )
-
-                                    }
-
-                                >
-
-                                    Draft
-
-                                </button>
-
-                                <button
-
-                                    className="primary-button"
-
-                                    onClick={() =>
-
-                                        setPreset(
-
-                                            "full"
-
-                                        )
-
-                                    }
-
-                                >
-
-                                    Full
-
-                                </button>
-
-                            </div>
-
-                            <hr
-
-                                style={{
-
-                                    margin: "18px 0",
-
-                                    opacity: .15,
-
-                                }}
-
-                            />
-
-                            <h3>
-
-                                Broadcast Controls
-
-                            </h3>
-
-                            <div className="broadcast-controls">
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showLeftTeam}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showLeftTeam"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Left Team
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showRightTeam}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showRightTeam"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Right Team
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showLogos}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showLogos"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Team Logos
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showNames}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showNames"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Team Names
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showScores}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showScores"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Scores
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showSeriesBar}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showSeriesBar"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Series Progress
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showPicksBans}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showPicksBans"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Picks / Bans
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showTimer}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showTimer"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Draft Timer
-
-                                </label>
-
-                                <label>
-
-                                    <input
-
-                                        type="checkbox"
-
-                                        checked={broadcastSettings.showDraftFlow}
-
-                                        onChange={() =>
-
-                                            toggle(
-
-                                                "showDraftFlow"
-
-                                            )
-
-                                        }
-
-                                    />
-
-                                    Draft Flow
-
-                                </label>
-
-                            </div>
-
-                        </>
-
-                    )}
 
                 </div>
 

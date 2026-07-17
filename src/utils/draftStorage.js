@@ -22,10 +22,23 @@ Save
 
 export function saveDraftToStorage(data, tournamentId) {
 
-    localStorage.setItem(
-        getStorageKey(tournamentId),
-        JSON.stringify(data)
-    );
+    try {
+
+        localStorage.setItem(
+            getStorageKey(tournamentId),
+            JSON.stringify(data)
+        );
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Failed to save draft state to localStorage:",
+            error
+        );
+
+    }
 
 }
 

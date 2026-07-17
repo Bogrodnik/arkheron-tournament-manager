@@ -16,7 +16,7 @@ import {
   DEFAULT_TOURNAMENT_SETTINGS,
 } from "../defaults/tournamentDefaults";
 import { generateDraftOrder } from "../utils/draftGenerator";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import DraftBoard from "../components/draft/DraftBoard";
@@ -33,7 +33,7 @@ import { crowns } from "../data/crowns";
 import { amulets } from "../data/amulets";
 import { weapons } from "../data/weapons";
 import { utilityItems } from "../data/utilityItems";
-import {saveDraftToStorage,loadDraftFromStorage,clearDraftStorage,} from "../utils/draftStorage";
+import { saveDraftToStorage } from "../utils/draftStorage";
 import "../styles/Draft.css";
 
 export default function Draft() {
@@ -233,14 +233,6 @@ Save State
 */
 
 
-const [saveStatus,
-  setSaveStatus] =
-  useState("Not Saved");
-
-const [lastSaved,
-  setLastSaved] =
-  useState(null);
-
 /*
 =========================================
 Data Pools
@@ -399,7 +391,6 @@ useEffect(() => {
                         setMatchHistory(data.matchHistory || []);
                         setTime(data.time ?? defaultTimer);
                         setRunning(data.running ?? false);
-                        setLastSaved(data.lastSaved || null);
 
                     }
 
@@ -422,7 +413,6 @@ useEffect(() => {
                 setMatchHistory(draftData.matchHistory || []);
                 setTime(draftData.time ?? defaultTimer);
                 setRunning(draftData.running ?? false);
-                setLastSaved(draftData.lastSaved || null);
                 setDraftLoaded(true);
                 setLoaded(true);
             }
@@ -536,14 +526,6 @@ useEffect(() => {
         data.running ??
 
         false
-
-    );
-
-    setLastSaved(
-
-        data.lastSaved ||
-
-        null
 
     );
 
@@ -862,190 +844,6 @@ function resetSeries() {
 
 /*
 =========================================
-Save Draft State
-=========================================
-*/
-
-function saveDraftState() {
-  try {
-    const timestamp =
-      new Date()
-        .toLocaleTimeString();
-
-  const saveData = {
-  draft,
-  step,
-  draftPool,
-  search,
-  score,
-  game,
-  team1Name,
-  team2Name,
-  team1Logo,
-  team2Logo,
-  matchHistory,
-  time,
-  running,
-};
-
-    localStorage.setItem(
-      "arkheronDraftState",
-      JSON.stringify(
-        saveData
-      )
-    );
-
-    setLastSaved(
-      timestamp
-    );
-
-    setSaveStatus(
-      "Saved"
-    );
-
-    console.log(
-      "Saved successfully",
-      saveData
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Save failed:",
-      error
-    );
-
-  }
-}
-
-/*
-=========================================
-Load Draft State
-=========================================
-*/
-
-function loadDraftState() {
-  const saved =
-    localStorage.getItem(
-      "arkheronDraftState"
-    );
-
-  if (!saved) {
-    alert(
-      "No saved draft found."
-    );
-    return;
-  }
-
-  try {
-    const data =
-      JSON.parse(saved);
-
-    setDraft(
-      data.draft || []
-    );
-
-    setStep(
-      data.step || 0
-    );
-
-    setDraftPool(
-      data.draftPool ||
-      "eternals"
-    );
-
-    setSearch(
-      data.search || ""
-    );
-
-    setScore(
-      data.score || {
-        team1: 0,
-        team2: 0,
-      }
-    );
-
-    setGame(
-      data.game || 1
-    );
-
-    setTeam1Name(
-      data.team1Name ||
-      "TEAM ALPHA"
-    );
-
-    setTeam2Name(
-      data.team2Name ||
-      "TEAM BETA"
-    );
-
-    setTeam1Logo(
-      data.team1Logo ||
-      null
-    );
-
-    setTeam2Logo(
-      data.team2Logo ||
-      null
-    );
-
-    setMatchHistory(
-  data.matchHistory ||
-  []
-);
-
-setTime(
-  data.time ??
-  defaultTimer
-);
-
-setRunning(
-  data.running ??
-  false
-);
-
-setLastSaved(
-  data.lastSaved ||
-  null
-);
-
-    setSaveStatus(
-      "Loaded"
-    );
-
-    console.log(
-      "Draft loaded successfully.",
-      data
-    );
-  } catch (error) {
-    console.error(
-      "Failed to load save:",
-      error
-    );
-
-    alert(
-      "Save file is corrupted."
-    );
-  }
-}
-
-function clearSavedData() {
-
-  localStorage.removeItem(
-    "arkheronDraftState"
-  );
-
-  setSaveStatus(
-    "Cleared"
-  );
-
-  setLastSaved(
-    null
-  );
-}
-
-/*
-=========================================
 Helper Functions
 =========================================
 */
@@ -1063,24 +861,6 @@ function resetTimer() {
   setTime(defaultTimer);
 
   setRunning(false);
-}
-
-function getSaveText() {
-
-  if (
-    saveStatus ===
-    "Cleared"
-  ) {
-    return "No Save";
-  }
-
-  if (
-    lastSaved
-  ) {
-    return `Saved ${lastSaved}`;
-  }
-
-  return "Not Saved";
 }
 
 /*
@@ -1131,7 +911,7 @@ return (
         className="team1-win-button"
         onClick={() => winGame("team1")}
     >
-        {team1Name} Wins
+      + Win
     </button>
 
     <span className="series-team-name">
@@ -1179,7 +959,7 @@ return (
         className="team2-win-button"
         onClick={() => winGame("team2")}
     >
-        {team2Name} Wins
+      + Win
     </button>
 
 </div>
@@ -1498,47 +1278,6 @@ return (
         </div>
 
       </div>
-
-    </div>
-
-    {/* =====================================
-        Save Overlay
-    ===================================== */}
-
-    <div className="save-overlay">
-
-      <div className="save-status">
-
-        💾 {getSaveText()}
-
-      </div>
-
-      <button
-        className="save-button"
-        onClick={
-          saveDraftState
-        }
-      >
-        Save
-      </button>
-
-      <button
-        className="load-button"
-        onClick={
-          loadDraftState
-        }
-      >
-        Load
-      </button>
-
-      <button
-        className="clear-button"
-        onClick={
-          clearSavedData
-        }
-      >
-        Clear
-      </button>
 
     </div>
 

@@ -1,5 +1,13 @@
 export function compressImage(file) {
 
+    if (!file || !file.type?.startsWith("image/")) {
+
+        return Promise.reject(
+            new Error("Only image files can be compressed.")
+        );
+
+    }
+
     return new Promise((resolve, reject) => {
 
         const reader = new FileReader();
@@ -20,6 +28,16 @@ export function compressImage(file) {
 
                 const ctx =
                     canvas.getContext("2d");
+
+                if (!ctx) {
+
+                    reject(
+                        new Error("Could not initialize canvas context.")
+                    );
+
+                    return;
+
+                }
 
                 const scale =
                     Math.max(
@@ -58,7 +76,7 @@ export function compressImage(file) {
 
                     canvas.toDataURL(
                         "image/webp",
-                          0.9
+                          0.88
                     )
 
                 );

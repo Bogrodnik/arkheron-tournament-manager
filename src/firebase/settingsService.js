@@ -66,11 +66,11 @@ export function listenToSettings(callback) {
         legacySettingsRef,
         snapshot => {
 
-            if (snapshot.exists()) {
-
-                callback(snapshot.data());
-
-            }
+            callback(
+                snapshot.exists()
+                    ? snapshot.data()
+                    : {}
+            );
 
         },
         error => {
@@ -127,11 +127,11 @@ export function listenToTournamentSettings(
         getTournamentSettingsRef(tournamentId),
         snapshot => {
 
-            if (snapshot.exists()) {
-
-                callback(snapshot.data());
-
-            }
+            callback(
+                snapshot.exists()
+                    ? snapshot.data()
+                    : {}
+            );
 
         },
         error => {

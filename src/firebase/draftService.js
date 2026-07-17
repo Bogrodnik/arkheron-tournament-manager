@@ -66,11 +66,11 @@ export function listenToDraft(callback) {
         legacyDraftRef,
         snapshot => {
 
-            if (snapshot.exists()) {
-
-                callback(snapshot.data());
-
-            }
+            callback(
+                snapshot.exists()
+                    ? snapshot.data()
+                    : null
+            );
 
         },
         error => {
@@ -127,11 +127,11 @@ export function listenToTournamentDraft(
         getTournamentDraftRef(tournamentId),
         snapshot => {
 
-            if (snapshot.exists()) {
-
-                callback(snapshot.data());
-
-            }
+            callback(
+                snapshot.exists()
+                    ? snapshot.data()
+                    : null
+            );
 
         },
         error => {

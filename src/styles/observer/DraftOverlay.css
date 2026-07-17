@@ -5,25 +5,16 @@ ROOT
 */
 
 .draft-overlay {
-
     width: 100vw;
     min-height: 100vh;
-
-    padding: 32px;
-
+    padding: clamp(16px, 1.6vw, 28px);
     display: flex;
     flex-direction: column;
-
-    gap: 28px;
-
-    color: white;
-
+    gap: clamp(14px, 1.1vw, 22px);
+    color: var(--color-text, #fff);
     background: transparent;
-
     overflow: hidden;
-
     box-sizing: border-box;
-
 }
 
 /*
@@ -33,94 +24,99 @@ HEADER
 */
 
 .overlay-header {
-
     display: grid;
-
-    grid-template-columns: 1fr auto 1fr;
-
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-
-    background: rgba(10,16,28,.92);
-
-    backdrop-filter: blur(16px);
-
-    border: 1px solid rgba(255,255,255,.08);
-
+    gap: 14px;
+    background: linear-gradient(180deg, rgba(20, 29, 45, .95), rgba(13, 19, 32, .95));
+    border: 1px solid rgba(255, 255, 255, .08);
     border-radius: 18px;
-
-    padding: 18px 28px;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.45);
-
+    padding: 10px 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
+    backdrop-filter: blur(16px);
 }
 
-/*
-====================================================
-TEAM
-====================================================
-*/
-
 .overlay-team {
-
     display: flex;
-
     align-items: center;
-
-    gap: 18px;
-
+    gap: 10px;
+    min-height: 60px;
+    min-width: 0;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 169, 232, .25);
+    background: rgba(255, 255, 255, .03);
 }
 
 .overlay-team.right {
-
     justify-content: flex-end;
-
+    border-color: rgba(201, 75, 75, .25);
 }
 
 .overlay-team h2 {
-
-    font-size: 2rem;
-
-    font-weight: 800;
-
+    margin: 0;
+    min-width: 0;
+    flex: 1;
     text-transform: uppercase;
-
     white-space: nowrap;
-
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: .02em;
+    font-family: var(--font-title);
+    font-size: clamp(1rem, 1.2vw, 1.45rem);
+    color: var(--color-text, #fff);
+    text-shadow: 0 0 10px rgba(0, 0, 0, .22);
 }
 
-/*
-====================================================
-LOGOS
-====================================================
-*/
+.overlay-team:not(.right) h2 {
+    text-align: right;
+}
+
+.overlay-team.right h2 {
+    text-align: left;
+}
 
 .overlay-logo {
-
-    width: 64px;
-
-    height: 64px;
-
-    object-fit: contain;
-
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(198, 168, 91, .32);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, .04);
 }
 
-/*
-====================================================
-TITLE
-====================================================
-*/
+.overlay-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(198, 168, 91, .24);
+    background: rgba(198, 168, 91, .08);
+}
 
 .overlay-title {
-
-    font-size: 2.4rem;
-
-    font-weight: 900;
-
+    margin-top: 0;
+    font-family: var(--font-title);
+    font-size: clamp(1.05rem, 1.18vw, 1.3rem);
     letter-spacing: .08em;
+    font-weight: 800;
+    color: var(--color-gold-light);
+    text-transform: uppercase;
+}
 
-    text-align: center;
-
+.overlay-game {
+    margin-top: 8px;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(198, 168, 91, .28);
+    background: rgba(12, 18, 28, .45);
+    font-size: .86rem;
+    color: var(--color-text-muted);
+    letter-spacing: .06em;
+    text-transform: uppercase;
 }
 
 /*
@@ -130,69 +126,204 @@ TOP SECTION
 */
 
 .overlay-top {
-
     display: grid;
-
-    grid-template-columns: 1fr 360px 1fr;
-
-    gap: 28px;
-
-    align-items: start;
-
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px) minmax(0, 1fr);
+    gap: 16px;
+    align-items: stretch;
 }
 
-/*
-====================================================
-DRAFT COLUMNS
-====================================================
-*/
+.overlay-top .draft-column,
+.overlay-top .draft-timer,
+.draft-overlay .draft-flow {
+    background: rgba(10, 16, 28, .9);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, .35);
+}
 
 .overlay-top .draft-column {
-
-    background: rgba(10,16,28,.88);
-
-    border-radius: 18px;
-
-    border: 1px solid rgba(255,255,255,.08);
-
-    padding: 20px;
-
-    backdrop-filter: blur(12px);
-
-    box-shadow:
-        0 12px 24px rgba(0,0,0,.35);
-
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    min-height: 0;
 }
 
 .overlay-top .draft-column h2 {
-
+    margin: 0;
+    padding: 0 4px;
     text-align: center;
+    font-family: var(--font-title);
+    font-size: clamp(1.05rem, 1.05vw, 1.3rem);
+    color: var(--color-gold-light);
+}
 
-    margin-bottom: 18px;
+.overlay-top .draft-scroll {
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px;
+}
 
-    font-size: 1.6rem;
+.overlay-top .draft-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    align-content: start;
+}
 
+.overlay-top .draft-timer {
+    min-height: 0;
+    padding: 14px;
+}
+
+.overlay-top .timer-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.overlay-top .timer-label {
+    min-width: 0;
+    font-family: var(--font-title);
+    color: var(--color-gold-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overlay-top .timer-value h1 {
+    margin: 0;
+    font-family: var(--font-title);
+    color: var(--color-gold-light);
+}
+
+.overlay-top .timer-bar {
+    margin-top: 8px;
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .05);
+    overflow: hidden;
+}
+
+.overlay-top .timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-success), var(--color-warning), var(--color-red));
 }
 
 /*
 ====================================================
-TIMER
+PICKS / BANS TOKENS
 ====================================================
 */
 
-.overlay-top .draft-timer {
+.draft-overlay .draft-slot {
+    width: 100%;
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 12px;
+    transition: .22s ease;
+}
 
-    background: rgba(10,16,28,.92);
+.draft-overlay .draft-slot:hover {
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(198, 168, 91, .28);
+}
 
-    border-radius: 18px;
+.draft-overlay .draft-slot.pick {
+    border-left: 4px solid var(--color-success);
+}
 
-    border: 1px solid rgba(255,255,255,.08);
+.draft-overlay .draft-slot.ban {
+    border-left: 4px solid var(--color-red);
+}
 
-    padding: 22px;
+.draft-overlay .draft-badge {
+    min-width: 74px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: .63rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    border: 1px solid transparent;
+}
 
-    box-shadow:
-        0 12px 24px rgba(0,0,0,.35);
+.draft-overlay .pick .draft-badge {
+    background: rgba(55, 163, 112, .22);
+    border-color: rgba(55, 163, 112, .48);
+    color: #fff;
+}
 
+.draft-overlay .ban .draft-badge {
+    background: rgba(201, 75, 75, .2);
+    border-color: rgba(201, 75, 75, .45);
+    color: #fff;
+}
+
+.draft-overlay .pick .draft-badge::before,
+.draft-overlay .ban .draft-badge::before {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    font-size: .62rem;
+    font-weight: 900;
+    background: rgba(255, 255, 255, .18);
+}
+
+.draft-overlay .pick .draft-badge::before {
+    content: "+";
+}
+
+.draft-overlay .ban .draft-badge::before {
+    content: "x";
+}
+
+.draft-overlay .draft-slot img {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+}
+
+.draft-overlay .draft-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.draft-overlay .draft-info h4,
+.draft-overlay .draft-info p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.draft-overlay .draft-info h4 {
+    font-size: 1.02rem;
+    color: var(--color-text);
+}
+
+.draft-overlay .draft-info p {
+    margin-top: 2px;
+    font-size: .86rem;
+    color: var(--color-text-muted);
 }
 
 /*
@@ -201,45 +332,98 @@ FLOW
 ====================================================
 */
 
-.draft-flow {
-
-    background: rgba(10,16,28,.90);
-
-    border-radius: 18px;
-
-    border: 1px solid rgba(255,255,255,.08);
-
-    padding: 22px;
-
-    backdrop-filter: blur(12px);
-
-    box-shadow:
-        0 12px 24px rgba(0,0,0,.35);
-
-    max-height: 420px;
-
+.draft-overlay .draft-flow {
+    padding: 14px;
+    max-height: 360px;
     overflow-y: auto;
+}
 
+.draft-overlay .flow-step {
+    display: grid;
+    grid-template-columns: 28px minmax(96px, auto) 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid transparent;
+}
+
+.draft-overlay .flow-step.current {
+    border-color: rgba(198, 168, 91, .36);
+    background: rgba(198, 168, 91, .08);
+}
+
+.draft-overlay .flow-number {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-gold);
+    color: #111;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.draft-overlay .flow-action {
+    color: var(--color-text);
+    font-size: .84rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.draft-overlay .flow-item {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    gap: 8px;
+}
+
+.draft-overlay .flow-item img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.draft-overlay .flow-item span {
+    color: var(--color-text-muted);
+    font-size: .76rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*
 ====================================================
-FLOW SCROLLBAR
+SCROLLBARS
 ====================================================
 */
 
-.draft-flow::-webkit-scrollbar {
-
+.draft-overlay .draft-scroll::-webkit-scrollbar,
+.draft-overlay .draft-flow::-webkit-scrollbar {
     width: 8px;
-
 }
 
-.draft-flow::-webkit-scrollbar-thumb {
-
-    background: rgba(255,255,255,.18);
-
+.draft-overlay .draft-scroll::-webkit-scrollbar-track,
+.draft-overlay .draft-flow::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, .04);
     border-radius: 999px;
+}
 
+.draft-overlay .draft-scroll::-webkit-scrollbar-thumb,
+.draft-overlay .draft-flow::-webkit-scrollbar-thumb {
+    background: rgba(198, 168, 91, .35);
+    border-radius: 999px;
+}
+
+.draft-overlay .draft-scroll::-webkit-scrollbar-thumb:hover,
+.draft-overlay .draft-flow::-webkit-scrollbar-thumb:hover {
+    background: rgba(198, 168, 91, .65);
 }
 
 /*
@@ -249,22 +433,14 @@ LOADING
 */
 
 .draft-overlay-loading {
-
     position: fixed;
-
     inset: 0;
-
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    color: white;
-
+    color: #fff;
     font-size: 2rem;
-
     background: transparent;
-
 }
 
 /*
@@ -274,11 +450,12 @@ RESPONSIVE
 */
 
 @media (max-width: 1500px) {
-
     .overlay-top {
-
         grid-template-columns: 1fr;
-
     }
 
+    .overlay-team:not(.right) h2,
+    .overlay-team.right h2 {
+        text-align: center;
+    }
 }

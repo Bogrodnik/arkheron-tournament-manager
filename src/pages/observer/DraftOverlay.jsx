@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import DraftBoard from "../../components/draft/DraftBoard";
 import DraftFlow from "../../components/draft/DraftFlow";
@@ -68,10 +68,37 @@ function subscribeToBroadcastSettings(
 
 export default function DraftOverlay() {
 
+    const navigate = useNavigate();
+    const { tournamentId } = useParams();
     const [searchParams] = useSearchParams();
 
-    const tournamentId =
-        searchParams.get("tournament");
+    useEffect(() => {
+
+        if (tournamentId) {
+
+            return;
+
+        }
+
+        const legacyTournamentId =
+            searchParams.get("tournament");
+
+        if (!legacyTournamentId) {
+
+            return;
+
+        }
+
+        navigate(
+            `/overlay/draft/${encodeURIComponent(legacyTournamentId)}`,
+            { replace: true }
+        );
+
+    }, [navigate, searchParams, tournamentId]);
+
+    const hasLegacyTournamentRedirect =
+        !tournamentId &&
+        Boolean(searchParams.get("tournament"));
 
     const [draftState, setDraftState] =
         useState(null);
@@ -124,6 +151,11 @@ export default function DraftOverlay() {
 
     }, [tournamentId]);
 
+    if (hasLegacyTournamentRedirect) {
+        return null;
+
+    }
+
     if (
 
         !draftState ||
@@ -151,6 +183,7 @@ export default function DraftOverlay() {
         draft,
 
         step,
+        game,
 
         team1Name,
         team2Name,
@@ -228,9 +261,15 @@ export default function DraftOverlay() {
 
                 </div>
 
-                <div className="overlay-title">
+                <div className="overlay-center">
 
-                    LIVE DRAFT
+                    <div className="overlay-title">
+                        LIVE DRAFT
+                    </div>
+
+                    <div className="overlay-game">
+                        Game {game ?? 1}
+                    </div>
 
                 </div>
 

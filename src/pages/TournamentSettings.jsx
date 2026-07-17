@@ -382,6 +382,15 @@ function moveDraftStepDown(index) {
 
 }
 
+function resetCustomDraftOrder() {
+
+    updateSetting(
+        "customDraftOrder",
+        DEFAULT_TOURNAMENT_SETTINGS.customDraftOrder
+    );
+
+}
+
 /*
 =========================================
 Reset Settings
@@ -413,167 +422,204 @@ return (
             Tournament Settings
         </h1>
 
-        {/* LEFT COLUMN */}
+        <div className="settings-card settings-overview-card">
 
-        <div className="settings-left">
+            <div className="settings-overview-layout">
 
-            {/* Tournament */}
+                <div className="settings-section settings-section-tournament">
 
-            <div className="settings-card tournament-card">
+                    <h2>Tournament</h2>
 
-                <h2>Tournament</h2>
+                    <div className="settings-section-grid settings-section-grid-1up">
 
-                <label>Tournament Name</label>
+                        <label>
+                            Tournament Name
 
-                <input
-                    value={settings.tournamentName}
-                    onChange={(e) =>
-                        updateSetting(
-                            "tournamentName",
-                            e.target.value
-                        )
-                    }
-                />
+                            <input
+                                value={settings.tournamentName}
+                                onChange={(e) =>
+                                    updateSetting(
+                                        "tournamentName",
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </label>
 
-                <label>Organizer</label>
+                        <label>
+                            Organizer
 
-                <input
-                    value={settings.organizer}
-                    onChange={(e) =>
-                        updateSetting(
-                            "organizer",
-                            e.target.value
-                        )
-                    }
-                />
+                            <input
+                                value={settings.organizer}
+                                onChange={(e) =>
+                                    updateSetting(
+                                        "organizer",
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </label>
 
-            </div>
+                    </div>
 
-            {/* Match Rules */}
+                </div>
 
-            <div className="settings-card match-card">
+                <div className="settings-overview-rules">
 
-                <h2>Match Rules</h2>
+                    <div className="settings-section settings-section-rules">
 
-                <label>Series Length</label>
+                        <h2>Match Rules</h2>
 
-                <select
-                    value={settings.seriesLength}
-                    onChange={(e) =>
-                        updateSetting(
-                            "seriesLength",
-                            Number(e.target.value)
-                        )
-                    }
-                >
-                    <option value={1}>BO1</option>
-                    <option value={3}>BO3</option>
-                    <option value={5}>BO5</option>
-                    <option value={7}>BO7</option>
-                    <option value={9}>BO9</option>
-                </select>
+                        <div className="settings-section-grid settings-section-grid-2up">
 
-                <label>Starting Team</label>
+                            <label>
+                                Series Length
 
-                <select
-                    value={settings.firstTeam}
-                    onChange={(e) =>
-                        updateSetting(
-                            "firstTeam",
-                            Number(e.target.value)
-                        )
-                    }
-                >
-                    <option value={1}>Team 1</option>
-                    <option value={2}>Team 2</option>
-                </select>
+                                <span className="settings-select-wrap">
+                                    <select
+                                        className="settings-select"
+                                        value={settings.seriesLength}
+                                        onChange={(e) =>
+                                            updateSetting(
+                                                "seriesLength",
+                                                Number(e.target.value)
+                                            )
+                                        }
+                                    >
+                                        <option value={1}>BO1</option>
+                                        <option value={3}>BO3</option>
+                                        <option value={5}>BO5</option>
+                                        <option value={7}>BO7</option>
+                                        <option value={9}>BO9</option>
+                                    </select>
+                                </span>
+                            </label>
 
-                <label className="checkbox">
+                            <label>
+                                Starting Team
 
-                    <input
-                        type="checkbox"
-                        checked={settings.swapSides}
-                        onChange={(e) =>
-                            updateSetting(
-                                "swapSides",
-                                e.target.checked
-                            )
-                        }
-                    />
+                                <span className="settings-select-wrap">
+                                    <select
+                                        className="settings-select"
+                                        value={settings.firstTeam}
+                                        onChange={(e) =>
+                                            updateSetting(
+                                                "firstTeam",
+                                                Number(e.target.value)
+                                            )
+                                        }
+                                    >
+                                        <option value={1}>Team 1</option>
+                                        <option value={2}>Team 2</option>
+                                    </select>
+                                </span>
+                            </label>
 
-                    Swap Sides Between Games
+                        </div>
 
-                </label>
+                        <label className="checkbox settings-inline-checkbox">
 
-            </div>
+                            <input
+                                type="checkbox"
+                                checked={settings.swapSides}
+                                onChange={(e) =>
+                                    updateSetting(
+                                        "swapSides",
+                                        e.target.checked
+                                    )
+                                }
+                            />
 
-            {/* Draft Rules */}
+                            Swap Sides Between Games
 
-            <div className="settings-card draft-card">
+                        </label>
 
-                <h2>Draft Rules</h2>
+                    </div>
 
-                <label>Draft Variant</label>
+                    <div className="settings-section settings-section-rules">
 
-                <select
-                    value={settings.draftVariant}
-                    onChange={(e) =>
-                        updateSetting(
-                            "draftVariant",
-                            e.target.value
-                        )
-                    }
-                >
-                    <option value="snake">Snake Draft</option>
-                    <option value="alternating">Alternating Draft</option>
-                    <option value="double-ban">Double Ban</option>
-                    <option value="custom">Custom Sequence</option>
-                </select>
+                        <h2>Draft Rules</h2>
 
-                <label>Picks Per Team</label>
+                        <div className="settings-section-grid settings-section-grid-4up">
 
-                <input
-                    type="number"
-                    min={0}
-                    max={99}
-                    value={settings.picksPerTeam}
-                    onChange={(e) =>
-                        updateSetting(
-                            "picksPerTeam",
-                            Number(e.target.value)
-                        )
-                    }
-                />
+                            <label>
+                                Draft Variant
 
-                <label>Bans Per Team</label>
+                                <span className="settings-select-wrap">
+                                    <select
+                                        className="settings-select"
+                                        value={settings.draftVariant}
+                                        onChange={(e) =>
+                                            updateSetting(
+                                                "draftVariant",
+                                                e.target.value
+                                            )
+                                        }
+                                    >
+                                        <option value="snake">Snake Draft</option>
+                                        <option value="alternating">Alternating Draft</option>
+                                        <option value="double-ban">Double Ban</option>
+                                        <option value="custom">Custom Sequence</option>
+                                    </select>
+                                </span>
+                            </label>
 
-                <input
-                    type="number"
-                    min={0}
-                    max={99}
-                    value={settings.bansPerTeam}
-                    onChange={(e) =>
-                        updateSetting(
-                            "bansPerTeam",
-                            Number(e.target.value)
-                        )
-                    }
-                />
+                            <label>
+                                Picks Per Team
 
-                <label>Timer Length</label>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    max={99}
+                                    value={settings.picksPerTeam}
+                                    onChange={(e) =>
+                                        updateSetting(
+                                            "picksPerTeam",
+                                            Number(e.target.value)
+                                        )
+                                    }
+                                />
+                            </label>
 
-                <input
-                    type="number"
-                    min={5}
-                    max={300}
-                    value={settings.timerLength}
-                    onChange={(e) =>
-                        updateSetting(
-                            "timerLength",
-                            Number(e.target.value)
-                        )
-                    }
-                />
+                            <label>
+                                Bans Per Team
+
+                                <input
+                                    type="number"
+                                    min={0}
+                                    max={99}
+                                    value={settings.bansPerTeam}
+                                    onChange={(e) =>
+                                        updateSetting(
+                                            "bansPerTeam",
+                                            Number(e.target.value)
+                                        )
+                                    }
+                                />
+                            </label>
+
+                            <label>
+                                Timer Length
+
+                                <input
+                                    type="number"
+                                    min={5}
+                                    max={300}
+                                    value={settings.timerLength}
+                                    onChange={(e) =>
+                                        updateSetting(
+                                            "timerLength",
+                                            Number(e.target.value)
+                                        )
+                                    }
+                                />
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -619,21 +665,6 @@ return (
                         )
                     )
                 }
-
-            </div>
-
-            {/* Save / Load */}
-
-            <div className="settings-card save-card">
-
-                <h2>Settings</h2>
-
-                <button
-                    className="danger"
-                    onClick={resetSettings}
-                >
-                    Reset Settings
-                </button>
 
             </div>
 
@@ -721,47 +752,53 @@ return (
                                                 {index + 1}
                                             </div>
 
-                                            <select
-                                                value={step.team}
-                                                onChange={(e) =>
-                                                    updateDraftStep(
-                                                        index,
-                                                        "team",
-                                                        Number(
+                                            <span className="settings-select-wrap">
+                                                <select
+                                                    className="settings-select"
+                                                    value={step.team}
+                                                    onChange={(e) =>
+                                                        updateDraftStep(
+                                                            index,
+                                                            "team",
+                                                            Number(
+                                                                e.target.value
+                                                            )
+                                                        )
+                                                    }
+                                                >
+                                                    <option value={1}>
+                                                        Team 1
+                                                    </option>
+
+                                                    <option value={2}>
+                                                        Team 2
+                                                    </option>
+
+                                                </select>
+                                            </span>
+
+                                            <span className="settings-select-wrap settings-select-wrap-flex">
+                                                <select
+                                                    className="settings-select"
+                                                    value={step.type}
+                                                    onChange={(e) =>
+                                                        updateDraftStep(
+                                                            index,
+                                                            "type",
                                                             e.target.value
                                                         )
-                                                    )
-                                                }
-                                            >
-                                                <option value={1}>
-                                                    Team 1
-                                                </option>
+                                                    }
+                                                >
+                                                    <option value="pick">
+                                                        Pick
+                                                    </option>
 
-                                                <option value={2}>
-                                                    Team 2
-                                                </option>
+                                                    <option value="ban">
+                                                        Ban
+                                                    </option>
 
-                                            </select>
-
-                                            <select
-                                                value={step.type}
-                                                onChange={(e) =>
-                                                    updateDraftStep(
-                                                        index,
-                                                        "type",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            >
-                                                <option value="pick">
-                                                    Pick
-                                                </option>
-
-                                                <option value="ban">
-                                                    Ban
-                                                </option>
-
-                                            </select>
+                                                </select>
+                                            </span>
 
                                             <button
                                                 onClick={() =>
@@ -814,12 +851,30 @@ return (
                                 + Add Ban
                             </button>
 
+                            <button
+                                className="danger"
+                                onClick={resetCustomDraftOrder}
+                            >
+                                Reset Custom Draft
+                            </button>
+
                         </div>
 
                     </div>
 
                 )
             }
+
+        </div>
+
+        <div className="settings-page-actions">
+
+            <button
+                className="danger settings-reset-button"
+                onClick={resetSettings}
+            >
+                Reset Settings
+            </button>
 
         </div>
 

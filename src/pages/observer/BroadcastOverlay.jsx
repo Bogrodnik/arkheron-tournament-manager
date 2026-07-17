@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import {
     listenToDraft,
@@ -65,10 +65,37 @@ function subscribeToBroadcastSettings(
 
 export default function BroadcastOverlay() {
 
+    const navigate = useNavigate();
+    const { tournamentId } = useParams();
     const [searchParams] = useSearchParams();
 
-    const tournamentId =
-        searchParams.get("tournament");
+    useEffect(() => {
+
+        if (tournamentId) {
+
+            return;
+
+        }
+
+        const legacyTournamentId =
+            searchParams.get("tournament");
+
+        if (!legacyTournamentId) {
+
+            return;
+
+        }
+
+        navigate(
+            `/overlay/${encodeURIComponent(legacyTournamentId)}`,
+            { replace: true }
+        );
+
+    }, [navigate, searchParams, tournamentId]);
+
+    const hasLegacyTournamentRedirect =
+        !tournamentId &&
+        Boolean(searchParams.get("tournament"));
 
     const [draft, setDraft] =
         useState(null);
@@ -122,6 +149,12 @@ export default function BroadcastOverlay() {
         };
 
     }, [tournamentId]);
+
+    if (hasLegacyTournamentRedirect) {
+
+        return null;
+
+    }
 
     if (
 

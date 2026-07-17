@@ -6,11 +6,15 @@ DASHBOARD
 
 .dashboard{
 
+    max-width:1600px;
+
+    margin:0 auto;
+
     display:flex;
 
     flex-direction:column;
 
-    gap:28px;
+    gap:24px;
 
 }
 
@@ -24,35 +28,17 @@ HEADER
 
     text-align:center;
 
-    padding:
-
-        clamp(
-
-            36px,
-
-            5vw,
-
-            64px
-
-        );
+    padding:clamp(30px,4vw,52px);
 
 }
 
 .dashboard-header h1{
 
+    margin-bottom:14px;
+
     font-family:var(--font-title);
 
-    font-size:
-
-        clamp(
-
-            2.5rem,
-
-            4vw,
-
-            4rem
-
-        );
+    font-size:clamp(2.5rem,4vw,4rem);
 
     font-weight:700;
 
@@ -60,11 +46,7 @@ HEADER
 
     letter-spacing:.04em;
 
-    margin-bottom:14px;
-
-    text-shadow:
-
-        0 2px 18px rgba(0,0,0,.45);
+    text-shadow:0 2px 18px rgba(0,0,0,.45);
 
 }
 
@@ -80,19 +62,12 @@ HEADER
 
     margin:18px auto 0;
 
-    background:
-
-        linear-gradient(
-
-            to right,
-
-            transparent,
-
-            var(--color-gold),
-
-            transparent
-
-        );
+    background:linear-gradient(
+        to right,
+        transparent,
+        var(--color-gold),
+        transparent
+    );
 
 }
 
@@ -100,273 +75,13 @@ HEADER
 
     max-width:900px;
 
-    margin:auto;
+    margin:0 auto;
 
     color:var(--color-text-muted);
 
     line-height:1.8;
 
     font-size:1.05rem;
-
-}
-
-/*
-====================================================
-GRID
-====================================================
-*/
-
-.dashboard-grid{
-
-    display:grid;
-
-    grid-template-columns:
-
-        repeat(
-
-            auto-fit,
-
-            minmax(
-
-                320px,
-
-                1fr
-
-            )
-
-        );
-
-    gap:24px;
-
-}
-
-/*
-====================================================
-CARDS
-====================================================
-*/
-
-.dashboard-card{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-    min-height:220px;
-
-    padding:24px;
-
-    background:var(--color-panel);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-lg);
-
-    backdrop-filter:blur(18px);
-
-    box-shadow:var(--shadow-lg);
-
-    transition:var(--transition);
-
-}
-
-.dashboard-card:hover{
-
-    transform:
-
-        translateY(-6px);
-
-    border-color:
-
-        rgba(
-
-            198,
-
-            168,
-
-            91,
-
-            .35
-
-        );
-
-    box-shadow:
-
-        var(--shadow-lg),
-
-        0 0 20px rgba(198,168,91,.08);
-
-}
-
-.dashboard-card h2{
-
-    font-family:var(--font-title);
-
-    font-size:1.6rem;
-
-    font-weight:700;
-
-    color:var(--color-gold-light);
-
-    padding-bottom:10px;
-
-    border-bottom:
-
-        1px solid
-
-        rgba(
-
-            255,
-
-            255,
-
-            255,
-
-            .06
-
-        );
-
-}
-
-.dashboard-card p{
-
-    flex:1;
-
-    color:var(--color-text-muted);
-
-    line-height:1.7;
-
-}
-
-.dashboard-action{
-
-    margin-top:auto;
-
-    font-weight:700;
-
-    color:var(--color-blue-light);
-
-    transition:var(--transition);
-
-}
-
-.dashboard-card:hover .dashboard-action{
-
-    color:var(--color-gold-light);
-
-}
-
-.dashboard-card-link{
-
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-    flex:1;
-    color:inherit;
-    text-decoration:none;
-
-}
-
-.dashboard-delete-button{
-
-    align-self:flex-start;
-    border:1px solid rgba(255,255,255,.16);
-    background:rgba(255,255,255,.04);
-    color:var(--color-text-muted);
-    padding:8px 12px;
-    border-radius:999px;
-    cursor:pointer;
-    transition:var(--transition);
-
-}
-
-.dashboard-delete-button:hover{
-
-    border-color:rgba(255,0,0,.35);
-    color:var(--color-gold-light);
-    background:rgba(255,0,0,.08);
-
-}
-
-/*
-====================================================
-DISABLED
-====================================================
-*/
-
-.dashboard-card.disabled{
-
-    opacity:.55;
-
-    cursor:not-allowed;
-
-}
-
-.dashboard-card.disabled:hover{
-
-    transform:none;
-
-    box-shadow:var(--shadow-lg);
-
-    border-color:var(--color-border);
-
-}
-
-.coming-soon{
-
-    color:var(--color-warning);
-
-    font-weight:700;
-
-    letter-spacing:.04em;
-
-    text-transform:uppercase;
-
-}
-
-/*
-====================================================
-FOOTER
-====================================================
-*/
-
-.dashboard-footer{
-
-    text-align:center;
-
-    padding:
-
-        18px
-
-        0
-
-        10px;
-
-    color:
-
-        rgba(
-
-            255,
-
-            255,
-
-            255,
-
-            .45
-
-        );
-
-    font-size:.9rem;
-
-}
-
-.dashboard-author{
-
-    color:var(--color-gold-light);
-
-    font-weight:700;
 
 }
 
@@ -388,7 +103,23 @@ FOOTER
 
     cursor:pointer;
 
+    transition:var(--transition);
+
 }
+
+.dashboard-create-button:hover{
+
+    filter:brightness(1.05);
+
+    transform:translateY(-2px);
+
+}
+
+/*
+====================================================
+LISTING
+====================================================
+*/
 
 .tournament-list-header{
 
@@ -397,6 +128,8 @@ FOOTER
     align-items:center;
 
     justify-content:space-between;
+
+    gap:16px;
 
 }
 
@@ -427,6 +160,56 @@ FOOTER
 
 }
 
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:24px;
+
+}
+
+.dashboard-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+    min-height:200px;
+
+    padding:24px;
+
+    transition:var(--transition);
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:rgba(198,168,91,.35);
+
+    box-shadow:var(--shadow-lg), 0 0 20px rgba(198,168,91,.08);
+
+}
+
+.dashboard-card-link{
+
+    display:flex;
+
+    flex:1;
+
+    flex-direction:column;
+
+    gap:16px;
+
+    min-width:0;
+
+}
+
 .tournament-card{
 
     color:inherit;
@@ -447,9 +230,29 @@ FOOTER
 
 }
 
+.tournament-card-header h2{
+
+    min-width:0;
+
+    padding-bottom:10px;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    font-family:var(--font-title);
+
+    font-size:1.6rem;
+
+    font-weight:700;
+
+    color:var(--color-gold-light);
+
+}
+
 .tournament-dates{
 
     display:grid;
+
+    grid-template-columns:repeat(2,minmax(0,1fr));
 
     gap:12px;
 
@@ -458,6 +261,8 @@ FOOTER
 .tournament-dates div{
 
     display:flex;
+
+    min-width:0;
 
     flex-direction:column;
 
@@ -475,6 +280,58 @@ FOOTER
 
 }
 
+.tournament-dates strong{
+
+    line-height:1.4;
+
+}
+
+.dashboard-actions{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+}
+
+.dashboard-actions .primary-button{
+
+    min-width:190px;
+
+}
+
+.dashboard-delete-button{
+
+    align-self:flex-start;
+
+    border:1px solid rgba(255,255,255,.16);
+
+    background:rgba(255,255,255,.04);
+
+    color:var(--color-text-muted);
+
+    padding:8px 12px;
+
+    border-radius:999px;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.dashboard-delete-button:hover{
+
+    border-color:rgba(255,0,0,.35);
+
+    color:var(--color-gold-light);
+
+    background:rgba(255,0,0,.08);
+
+}
+
 .tournament-empty{
 
     padding:28px;
@@ -482,5 +339,39 @@ FOOTER
     color:var(--color-text-muted);
 
     text-align:center;
+
+}
+
+/*
+====================================================
+FOOTER
+====================================================
+*/
+
+.dashboard-footer{
+
+    padding:18px 0 10px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.45);
+
+    font-size:.9rem;
+
+}
+
+@media (max-width: 900px){
+
+    .dashboard-card{
+
+        padding:20px;
+
+    }
+
+    .tournament-dates{
+
+        grid-template-columns:1fr;
+
+    }
 
 }

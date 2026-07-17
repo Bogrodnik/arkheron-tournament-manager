@@ -4,320 +4,422 @@ ROOT
 ==================================================
 */
 
-.draft-v2-root{
+.draft-v2-root {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+    padding-top: 10px;
+    background: transparent;
+    box-sizing: border-box;
+}
 
-    position:fixed;
-
-    inset:0;
-
-    pointer-events:none;
-
-    overflow:hidden;
-
-    background:transparent;
-
-    z-index:1000;
-
+.draft-v2-vertical {
+    width: min(620px, 95vw);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform: scale(0.9);
+    transform-origin: top center;
 }
 
 /*
 ==================================================
-COLUMNS
+TEAM CARDS (SCOREBOARD STYLE)
 ==================================================
 */
 
-.draft-v2-column{
-
-    position:absolute;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:22px;
-
+.draft-v2-team-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 108px;
+    padding: 18px 20px;
+    background: rgba(8, 14, 25, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
 }
 
-.draft-v2-column-left{
-
-    left:32px;
-
+.draft-v2-team-card.left {
+    border-left: 6px solid #3b82f6;
 }
 
-.draft-v2-column-right{
+.draft-v2-team-card.right {
+    justify-content: flex-end;
+    border-right: 6px solid #ef4444;
+}
 
-    right:32px;
+.draft-v2-team-card h2 {
+    margin: 0;
+    min-width: 0;
+    flex: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.04em;
+    font-size: clamp(1.65rem, 2.2vw, 2.2rem);
+    font-weight: 900;
+    color: #ffffff;
+}
 
-    align-items:flex-end;
+.draft-v2-team-card.left h2 {
+    text-align: right;
+}
 
+.draft-v2-team-card.right h2 {
+    text-align: left;
+}
+
+.draft-v2-logo {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 2px solid rgba(198, 168, 91, 0.45);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
 }
 
 /*
 ==================================================
-PORTRAIT
+CENTER STATUS + TIMER
 ==================================================
 */
 
-.draft-v2-portrait{
+.draft-v2-center-card,
+.draft-v2-root .draft-timer {
+    background: rgba(8, 14, 25, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+}
 
-    position:relative;
+.draft-v2-center-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 18px;
+}
 
-    width:112px;
+.draft-v2-title {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #f6dfae;
+}
 
-    height:112px;
+.draft-v2-game {
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(198, 168, 91, 0.3);
+    background: rgba(18, 26, 40, 0.8);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+}
 
-    border-radius:50%;
+.draft-v2-action-text {
+    max-width: 100%;
+    margin-top: 2px;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    overflow:hidden;
+.draft-v2-root .draft-timer {
+    min-height: 112px;
+    padding: 14px 16px;
+}
 
-    isolation:isolate;
+.draft-v2-root .timer-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 14px;
+}
 
-    transition:
+.draft-v2-root .timer-label {
+    min-width: 0;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #f6dfae;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-        transform .25s ease,
+.draft-v2-root .timer-value h1 {
+    margin: 0;
+    font-size: 2.3rem;
+    line-height: 1;
+    color: #ffffff;
+}
 
-        box-shadow .25s ease;
+.draft-v2-root .timer-bar {
+    margin-top: 10px;
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
 
+.draft-v2-root .timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #37a370, #d2ad61, #c94b4b);
 }
 
 /*
 ==================================================
-IMAGE
+DRAFT BOARDS
 ==================================================
 */
 
-.draft-v2-image{
+.draft-v2-board .draft-column,
+.draft-v2-flow-wrap .draft-flow {
+    background: rgba(8, 14, 25, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+}
 
-    width:100%;
+.draft-v2-board .draft-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+}
 
-    height:100%;
+.draft-v2-board .draft-column > h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f6dfae;
+}
 
-    object-fit:cover;
+.draft-v2-board .draft-scroll {
+    max-height: 225px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px;
+}
 
-    /*
-        Shows more face than body.
-    */
+.draft-v2-board .draft-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
 
-    object-position:center 0%;
+.draft-v2-root .draft-slot {
+    width: 100%;
+    min-height: 102px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+}
 
-    transform:scale(.9);
+.draft-v2-root .draft-slot.pick {
+    border-left: 5px solid #37a370;
+}
 
-    user-select:none;
+.draft-v2-root .draft-slot.ban {
+    border-left: 5px solid #c94b4b;
+}
 
-    pointer-events:none;
+.draft-v2-root .draft-badge {
+    min-width: 92px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    border: 1px solid transparent;
+}
 
+.draft-v2-root .pick .draft-badge {
+    background: rgba(55, 163, 112, 0.22);
+    border-color: rgba(55, 163, 112, 0.45);
+    color: #ffffff;
+}
+
+.draft-v2-root .ban .draft-badge {
+    background: rgba(201, 75, 75, 0.2);
+    border-color: rgba(201, 75, 75, 0.45);
+    color: #ffffff;
+}
+
+.draft-v2-root .draft-slot img {
+    width: 82px;
+    height: 82px;
+    object-fit: contain;
+}
+
+.draft-v2-root .draft-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.draft-v2-root .draft-info h4,
+.draft-v2-root .draft-info p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.draft-v2-root .draft-info h4 {
+    font-size: 1.08rem;
+    color: #ffffff;
+}
+
+.draft-v2-root .draft-info p {
+    margin-top: 3px;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.72);
 }
 
 /*
 ==================================================
-OUTER RING
+FLOW
 ==================================================
 */
 
-.draft-v2-portrait::before{
+.draft-v2-flow-wrap .draft-flow {
+    padding: 12px;
+    max-height: 260px;
+    overflow-y: auto;
+}
 
-    content:"";
+.draft-v2-root .flow-step {
+    display: grid;
+    grid-template-columns: 32px minmax(94px, auto) 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid transparent;
+}
 
-    position:absolute;
+.draft-v2-root .flow-step.current {
+    border-color: rgba(198, 168, 91, 0.38);
+    background: rgba(198, 168, 91, 0.1);
+}
 
-    inset:0;
+.draft-v2-root .flow-number {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #d2ad61;
+    color: #111;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
 
-    border-radius:50%;
+.draft-v2-root .flow-action {
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    border:3px solid rgba(255,255,255,.92);
+.draft-v2-root .flow-item {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    gap: 8px;
+}
 
-    box-sizing:border-box;
+.draft-v2-root .flow-item img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
 
-    z-index:5;
-
+.draft-v2-root .flow-item span {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*
 ==================================================
-INNER SHADOW
+SCROLLBARS
 ==================================================
 */
 
-.draft-v2-portrait::after{
+.draft-v2-root .draft-scroll::-webkit-scrollbar,
+.draft-v2-root .draft-flow::-webkit-scrollbar {
+    width: 8px;
+}
 
-    content:"";
+.draft-v2-root .draft-scroll::-webkit-scrollbar-track,
+.draft-v2-root .draft-flow::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+}
 
-    position:absolute;
+.draft-v2-root .draft-scroll::-webkit-scrollbar-thumb,
+.draft-v2-root .draft-flow::-webkit-scrollbar-thumb {
+    background: rgba(198, 168, 91, 0.45);
+    border-radius: 999px;
+}
 
-    inset:0;
-
-    border-radius:50%;
-
-    box-shadow:
-
-        inset 0 0 24px rgba(0,0,0,.42);
-
+.draft-v2-root .draft-scroll::-webkit-scrollbar-thumb:hover,
+.draft-v2-root .draft-flow::-webkit-scrollbar-thumb:hover {
+    background: rgba(198, 168, 91, 0.7);
 }
 
 /*
 ==================================================
-PICK
+LOADING
 ==================================================
 */
 
-.draft-v2-pick{
-
-    box-shadow:none;
-
-}
-
-.draft-v2-pick::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    border-radius:50%;
-
-    background:
-
-        radial-gradient(
-
-            circle,
-
-            rgba(70,255,120,.35) 20%,
-
-            rgba(70,255,120,.18) 55%,
-
-            rgba(70,255,120,0) 90%
-
-        );
-
-    mix-blend-mode:screen;
-
-}
-
-/*
-==================================================
-BAN
-==================================================
-*/
-
-.draft-v2-ban{
-
-    box-shadow:none;
-
-}
-
-.draft-v2-ban::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    border-radius:50%;
-
-    background:
-
-        radial-gradient(
-
-            circle,
-
-            rgba(255,60,60,.40) 20%,
-
-            rgba(255,60,60,.18) 55%,
-
-            rgba(255,60,60,0) 90%
-
-        );
-
-    mix-blend-mode:screen;
-
-}
-
-/*
-==================================================
-SUBTLE IDLE ANIMATION
-==================================================
-*/
-
-.draft-v2-portrait{
-
-    animation:
-
-        draft-v2-idle
-
-        4s
-
-        ease-in-out
-
-        infinite;
-
-}
-
-@keyframes draft-v2-idle{
-
-    0%{
-
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        transform:scale(1.03);
-
-    }
-
-    100%{
-
-        transform:scale(1);
-
-    }
-
-}
-
-/*
-==================================================
-ENTRY ANIMATION
-==================================================
-*/
-
-.draft-v2-portrait{
-
-    animation:
-
-        draft-v2-pop .35s ease,
-
-        draft-v2-idle 4s ease-in-out infinite;
-
-}
-
-@keyframes draft-v2-pop{
-
-    from{
-
-        opacity:0;
-
-        transform:
-
-            scale(.8);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-
-            scale(1);
-
-    }
-
+.draft-v2-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 2rem;
+    background: transparent;
 }
 
 /*
@@ -326,38 +428,39 @@ RESPONSIVE
 ==================================================
 */
 
-@media (max-width:1600px){
-
-    .draft-v2-portrait{
-
-        width:96px;
-
-        height:96px;
-
+@media (max-width: 1200px) {
+    .draft-v2-vertical {
+        width: min(540px, 95vw);
+        transform: scale(0.86);
     }
 
+    .draft-v2-team-card {
+        min-height: 96px;
+        padding: 14px 16px;
+    }
+
+    .draft-v2-logo {
+        width: 82px;
+        height: 82px;
+    }
 }
 
-@media (max-width:1200px){
-
-    .draft-v2-column-left{
-
-        left:18px;
-
+@media (max-width: 900px) {
+    .draft-v2-vertical {
+        width: 95vw;
+        transform: scale(0.82);
     }
 
-    .draft-v2-column-right{
-
-        right:18px;
-
+    .draft-v2-team-card h2 {
+        font-size: 1.3rem;
     }
 
-    .draft-v2-portrait{
-
-        width:82px;
-
-        height:82px;
-
+    .draft-v2-root .draft-slot {
+        min-height: 90px;
     }
 
+    .draft-v2-root .draft-slot img {
+        width: 68px;
+        height: 68px;
+    }
 }

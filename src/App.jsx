@@ -85,6 +85,18 @@ export default function App() {
                     />
 
                     <Route
+                        path="/overlay"
+                        element={
+                            <BroadcastOverlay />
+                        }
+                    />
+                    <Route
+                        path="/overlay/:tournamentId"
+                        element={
+                            <BroadcastOverlay />
+                        }
+                    />
+                    <Route
                         path="/overlay/broadcast"
                         element={
                             <BroadcastOverlay />
@@ -97,11 +109,29 @@ export default function App() {
                         }
                     />
                     <Route
+                        path="/overlay-v2"
+                        element={<DraftOverlayV2 />}
+                    />
+                    <Route
+                        path="/overlay-v2/:tournamentId"
+                        element={<DraftOverlayV2 />}
+                    />
+                    <Route
                         path="/overlay/draft-v2"
                         element={<DraftOverlayV2 />}
                     />
                     <Route
+                        path="/overlay/draft-v2/:tournamentId"
+                        element={<DraftOverlayV2 />}
+                    />
+                    <Route
                         path="/overlay/draft"
+                        element={
+                            <DraftOverlay />
+                        }
+                    />
+                    <Route
+                        path="/overlay/draft/:tournamentId"
                         element={
                             <DraftOverlay />
                         }
